@@ -14,7 +14,7 @@ This game will feature:
     * Example 1: Solve 1 chess puzzle equates to dealing 1 damage against an enemy.
     * Example 2: Take 1 damage when failing a chess puzzle.
 * Text-based RPG - Explore the world of Elchess with text-based commands. Explore dungeons, biomes, and interact with the denizens of Elchess to uncover its secrets.
-    * Example 1: You wake up in a dark cave, alone, where you can see a light in the distance. Next to you, a small rock exhibiits a strange glow. How do you proceed? 
+    * Example 1: You wake up in a dark cave, alone, where you can see a light in the distance. Next to you, a small rock exhibits a strange glow. How do you proceed? 
     * Exits: [A C]
     * A: Go towards the light. 
     * B: Do Nothing 
@@ -28,7 +28,7 @@ Bonus features (if we have time):
 
 * Variations or additional features to the game of Chess itself
 * Expansions to the RPG aspects
-* Maximize replayability through better randomizers
+* Maximize replayability through better randomizers or additional content
 * Other minigames
 
 Challenges:
