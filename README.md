@@ -8,7 +8,7 @@ Names: Blong Vang, Kobe Maristela, Jordan Rood, Tim Ancona, Emmanuel Gutierrez C
 
 Journey across the six realms of Elchess to acquire all chess pieces and become the Greatmaster of Elchess.
 
-This game will feature a:
+This game will feature:
 
 * Chess Puzzle Simulator  - Solve chess puzzles to battle against randomly encountered enemies and bosses.
     * Example 1: Solve 1 chess puzzle equates to dealing 1 damage against an enemy.
