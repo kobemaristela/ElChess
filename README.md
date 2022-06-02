@@ -35,3 +35,4 @@ Challenges:
 * None of us know Chess well. We would all need to do heavy research on the subject before diving in.
 * Worldbuilding and script writing would be a large undertaking on top of the coding requirement of building a text-based RPG
 * The sheer volume of Chess puzzles needed to keep the randomizer for "battles" fresh, on top of needed classification into various stages of difficulty for each of the "realms"
+* Making the game fun, challenging, and replayable
