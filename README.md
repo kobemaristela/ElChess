@@ -10,9 +10,9 @@ Journey across the six realms of Elchess to acquire all chess pieces and become 
 
 This game will feature:
 
-* Chess Puzzle Simulator  - Solve chess puzzles to battle against randomly encountered enemies and bosses.
-    * Example 1: Solve 1 chess puzzle equates to dealing 1 damage against an enemy.
-    * Example 2: Take 1 damage when failing a chess puzzle.
+* Chess Puzzle Simulator  - Solve chess puzzles to battle against randomly encountered enemies and bosses. Utilize the Stockfish chess engine to set AI difficulty and chess settings.
+    * Solve 1 chess puzzle equates to dealing 1 damage against an enemy.
+    * Take 1 damage when failing a chess puzzle.
 * Text-based RPG - Explore the world of Elchess with text-based commands. Explore dungeons, biomes, and interact with the denizens of Elchess to uncover its secrets.
     * Example 1: You wake up in a dark cave, alone, where you can see a light in the distance. Next to you, a small rock exhibits a strange glow. How do you proceed? 
     * Exits: [A C]
