@@ -28,6 +28,7 @@ Bonus features (if we have time):
 
 * Variations or additional features to the game of Chess itself
 * Expansions to the RPG aspects
+* Maximize replayability through better randomizers
 * Other minigames
 
 Challenges:
