@@ -1,4 +1,5 @@
 # Imports
+import random
 
 class Chess_Board:
 
