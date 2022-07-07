@@ -4,6 +4,9 @@ Group 15
 
 Names: Blong Vang, Kobe Maristela, Jordan Rood, Tim Ancona, Emmanuel Gutierrez Cornejo
 
+##Presentation
+https://docs.google.com/presentation/d/1_W84oneH_hCo1ZpfxYTXvR2kcTZxyzj29MZaU5xUayI/edit?usp=sharing
+
 ## Description
 
 Journey across the six realms of Elchess to acquire all chess pieces and become the Greatmaster of Elchess.
