@@ -4,7 +4,7 @@ Group 15
 
 Names: Blong Vang, Kobe Maristela, Jordan Rood, Tim Ancona, Emmanuel Gutierrez Cornejo
 
-##Presentation
+## Presentation
 https://docs.google.com/presentation/d/1_W84oneH_hCo1ZpfxYTXvR2kcTZxyzj29MZaU5xUayI/edit?usp=sharing
 
 ## Description
