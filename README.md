@@ -7,7 +7,7 @@ Names: Blong Vang, Kobe Maristela, Jordan Rood, Tim Ancona, Emmanuel Gutierrez C
 ## Progress Overview
 https://docs.google.com/presentation/d/1_W84oneH_hCo1ZpfxYTXvR2kcTZxyzj29MZaU5xUayI/edit?usp=sharing
 
-## Techincal Design Document
+## Technical Design Document
 https://docs.google.com/document/d/1WySE5AJgGUELTtmZoP7sx3xJvzS245AY7lwgcv_Rrt0/edit?usp=sharing
 
 ## Description
