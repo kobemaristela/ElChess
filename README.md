@@ -52,7 +52,7 @@ pipenv shell
 ```
 
 
-## Pipenv Commands
+### Pipenv Commands
 Install additional dependencies to environment
 ```sh
 pipenv install name_of_dependency
