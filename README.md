@@ -42,3 +42,9 @@ Challenges:
 * Worldbuilding and script writing would be a large undertaking on top of the coding requirement of building a text-based RPG
 * The sheer volume of Chess puzzles needed to keep the randomizer for "battles" fresh, on top of needed classification into various stages of difficulty for each of the "realms"
 * Making the game fun, challenging, and replayable
+
+
+## Usage
+To initiate environment follow the instructions below:
+* git clone https://gitlab.com/techwise-group-15/project-1.git
+
