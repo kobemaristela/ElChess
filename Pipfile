@@ -5,9 +5,10 @@ name = "pypi"
 
 [packages]
 chess = "==1.9.2"
-faster-than-csv = "==21.05.10"
+pandas = "*"
+pyarrow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.10"
