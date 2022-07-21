@@ -29,21 +29,6 @@ class ParquetConverter():
         csv_stream = pd.read_csv(
             self.csv, sep="\t", chunksize=self.chunksize, low_memory=False, **csv_kwargs)
 
-<<<<<<< HEAD
-        parquet_schema = None
-        parquet_writer = None
-        for i, chunk in enumerate(csv_stream):
-            print("Chunk", i)
-            if not parquet_schema:
-                # Guess the schema of the CSV file from the first chunk
-                parquet_schema = pa.Table.from_pandas(df=chunk).schema
-                # Open a Parquet file for writing
-                parquet_writer = pq.ParquetWriter(
-                    self.parquet, parquet_schema, compression="snappy")
-            # Write CSV chunk to the parquet file
-            table = pa.Table.from_pandas(chunk, schema=parquet_schema)
-            parquet_writer.write_table(table)
-=======
         schema = None
         writer = None
         for i, chunk in enumerate(csv_stream):
@@ -56,7 +41,6 @@ class ParquetConverter():
             # Write CSV chunk to the parquet file
             table = pa.Table.from_pandas(chunk, schema=schema)
             writer.write_table(table)
->>>>>>> 8319c36 (Finalize ParquetConverter Class)
 
         parquet_writer.close()
 
