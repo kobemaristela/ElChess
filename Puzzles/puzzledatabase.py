@@ -48,7 +48,12 @@ class PuzzleDatabase():
 
         self.__pyarrow_parse_parquet()
 
-    def read_results(self):
+    def read_results(self, clear_results=False):
+        if clear_results:
+            temp = self.results
+            self.results.clear()
+            return temp
+            
         return self.results
 
 if __name__ == "__main__":
