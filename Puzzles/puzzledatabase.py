@@ -32,7 +32,8 @@ class PuzzleDatabase():
     def _process_string(self, fen):
         fen_str = fen.split(',')[1]
         fen_parser = FenParser(fen_str)
-        fen_parser.search_piece(self.search)
+        if fen_parser.search_piece(self.search):
+            self.results.append(fen)
 
     def main(self):
         """
