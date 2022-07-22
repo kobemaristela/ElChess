@@ -8,41 +8,51 @@ from parquetconverter import ParquetConverter
 
 
 class PuzzleDatabase():
-    def __init__(self, database, workers=mp.cpu_count()):
+    def __init__(self, database, search=None, workers=mp.cpu_count()):
         self.database = database
         self.workers = workers
-
-    def main(self):
-        if Path(self.database).suffix != '.parquet':
-            convert = ParquetConverter(self.database,
-                                       self.database.with_suffix('.parquet'))
-            if convert.csv_to_parquet_pyarrow():
-                self.database = self.database.with_suffix('.parquet')
-
-        self.pyarrow_parse_parquet()
+        self.search = search
+        self.results = []
 
     """
     Statistics on Pyarrow with Parquet
     https://github.com/tirthajyoti/Machine-Learning-with-Python/blob/master/Pandas%20and%20Numpy/Read_data_various_sources/Pandas%20CSV%20vs.%20PyArrow%20parquet%20reading%20speed.ipynb
     """
-    def pyarrow_parse_parquet(self):
+    def __pyarrow_parse_parquet(self):
         table = arrowParquet.read_table(self.database)
         pool = mp.Pool(self.workers)
 
         for chunk in table:
             for line in chunk:
-                pool.apply_async(self.process_string, [line.as_py()])
+                pool.apply_async(self._process_string, [line.as_py()])
 
         pool.close()
         pool.join()
 
-    def process_string(self, fen):
-        print(self.workers)
-        temp = fen.split(',')
-        print(temp)
+    def _process_string(self, fen):
+        fen_str = fen.split(',')[1]
+        fen_parser = FenParser(fen_str)
+        fen_parser.search_piece(self.search)
 
+    def main(self):
+        """
+        @TODO: create check for csv file
+        """
+        if not self.database.with_suffix('.parquet').is_file():
+            if Path(self.database).suffix != '.parquet':
+                convert = ParquetConverter(self.database,
+                                            self.database.with_suffix('.parquet'))
+                if convert.csv_to_parquet_pyarrow():
+                    self.database = self.database.with_suffix('.parquet')
+
+        self.__pyarrow_parse_parquet()
+
+    def read_results(self):
+        return self.results
 
 if __name__ == "__main__":
     cwd = Path(__file__).parent.resolve()
-    db = PuzzleDatabase(cwd.joinpath('lichess_db_puzzle.csv'))
+    db = PuzzleDatabase(cwd.joinpath('lichess_db_puzzle.csv'),'Pp')
     db.main()
+
+    db.read_results()

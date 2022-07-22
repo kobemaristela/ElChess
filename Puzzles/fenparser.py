@@ -13,17 +13,21 @@ class FenParser():
         self.halfmove_clock = None      # Number of halfmoves since the last capture or pawn advance (used for the fifty-move rule)
         self.fullmove_number = None     # Number of full moves
 
-    def read_fen(self):
+        self.__read_fen()
+
+    def __read_fen(self):
         (self.pieces, self.active, self.castling, self.en_passant,
             self.halfmove_clock, self.fullmove_number) = self.fen.split(' ')
-        
-        self.validate_fen_field()
+        self.__validate_fen_field()
 
-    def validate_fen_field(self):
+    def __validate_fen_field(self):
+        re_pieces = re.compile('^[KkQqBbNnRrPp1-8/]+$')
         re_castle = re.compile('^[KQkq-]+$')
         re_en_passant = re.compile('^[a-h1-8-]+$')
         re_digits = re.compile('^[0-9]*$')
 
+        if not re_pieces.match(self.pieces):
+            raise ValueError(f'Invalid pieces: {self.pieces}')
         if self.active not in ('w', 'b'):
             raise ValueError(f'Invalid color: {self.active}')
         if not re_castle.match(self.castling):
@@ -35,35 +39,39 @@ class FenParser():
         if not re_digits.match(self.fullmove_number):
             raise ValueError(f'Invalid fullmove number: {self.fullmove_number}')          
 
-    def parse(self):
-        ranks = self.fen.split(" ")[0].split("/")
-        rank_pieces = [self.parse_rank(rank) for rank in ranks]
-        return rank_pieces
-
-    def parse_rank(self, rank):
-        reg_exp = re.compile("(\d|[kqbnrpKQBNRP])")
-        matches = reg_exp.findall(rank)
-        pieces = self.flatten(map(self.expand, matches))
-        return pieces
-
-    def flatten(self, lst):
+    def __flatten(self, lst):
         return list(chain(*lst))
 
-    def expand(self, pieceString):
-        reg_exp = re.compile("([kqbnrpKQBNRP])")
+    def __expand(self, pieces):
+        reg_exp = re.compile("(^[KkQqBbNnRrPp]$)")
         res = ""
-        if reg_exp.match(pieceString):
-            res = pieceString
+        if reg_exp.match(pieces):
+            res = pieces
         else:
-            res = self.padding(pieceString)
+            res = self.__padding(pieces)    # pads spaces
         return res
 
-    def padding(self, num_str):
-        return int(num_str) * " "
+    def __padding(self, num):
+        return int(num) * " "
 
+    def __parse_rank(self, rank):
+        reg_exp = re.compile("(\d|[KkQqBbNnRrPp])")
+        matches = reg_exp.findall(rank)
+        pieces = self.__flatten(map(self.__expand, matches))
+        return pieces
+
+    def parse(self):
+        ranks = self.pieces.split("/")
+        return [self.__parse_rank(rank) for rank in ranks]
+
+    def search_piece(self, piece):
+        re_pieces = re.compile(f"^[Kk{piece}1-8/]+$")
+        res = re_pieces.match(self.pieces)
+        return True if res else False
 
 if __name__ == "__main__":
-    FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    FEN = "4p3/5pk1/1p3pP1/3p3p/2pP4/P4P1P/1P3PP1/7K w - - 6 34"
     p = FenParser(FEN)
+    print(p.find_piece('Pp'))
 
     [print(rank) for rank in p.parse()]
