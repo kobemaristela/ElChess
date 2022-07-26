@@ -8,8 +8,12 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Elchess")
         self.clock = pygame.time.Clock()
-
         self.map = Map()
+
+        #audio
+        self.music = pygame.mixer.Sound('dungeon_music.wav')
+        self.music.set_volume(0.5)
+        self.music.play()
 
     def run(self):
         # run and setup game here

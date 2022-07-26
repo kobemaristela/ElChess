@@ -27,7 +27,7 @@ class Map:
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
                 if col == 'w':
-                    Wall((x, y), [self.visible_sprites])
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites])
                 elif col == 'p':
                     Player((x, y), [self.visible_sprites])
                 
