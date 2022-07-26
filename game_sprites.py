@@ -1,6 +1,6 @@
 import pygame
 
-from map_constants import BLOCK_SIZE
+from Realms.map_constants import BLOCK_SIZE
 
 #thanks to http://programarcadegames.com/index.php?chapter=introduction_to_sprites&lang=en for providing a very useful guide on sprites
 class HeroSprite(pygame.sprite.Sprite):

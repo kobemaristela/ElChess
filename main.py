@@ -1,5 +1,5 @@
 import pygame
-from map_constants import *
+from Realms.map_constants import *
 from game_sprites import *
 from Realms.room import Room
 
