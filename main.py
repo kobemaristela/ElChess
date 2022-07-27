@@ -2,6 +2,8 @@ import pygame
 from Realms.map_constants import *
 from game_sprites import *
 from Realms.room import Room
+from Mobs.monster import Monster
+from pygame_main import Button
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Elchess Map")
@@ -80,7 +82,7 @@ def draw_window(*sprite_groups: pygame.sprite.Group):
     for group in sprite_groups:
         group.draw(WIN)
         
-    pygame.display.update()
+
 
 
 # thanks to https://stackoverflow.com/a/61007670
@@ -104,9 +106,21 @@ def main():
     hero_sprite_group = pygame.sprite.Group()
     hero_sprite = HeroSprite(BLUE, BLOCK_SIZE // 2, BLOCK_SIZE // 2, (hero_rect.x, hero_rect.y))
     hero_sprite_group.add(hero_sprite)
+
+
     wall_sprites = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     all_sprites.add(hero_sprite)
+
+    monsters = pygame.sprite.Group()
+    monster1 = Monster(175, 175)
+    monsters.add(monster1)
+
+    #from Timothy's pygame_main file
+    attack_button_img = pygame.image.load('attack_button.png').convert_alpha()
+    flee_button_img = pygame.image.load('flee_button.png').convert_alpha()
+    player_attack_button = Button(50, 300, attack_button_img, 0.65) #changed y coordinate
+    player_flee_button = Button(450, 300, flee_button_img, 0.65)
 
     clock = pygame.time.Clock()
     run = True
@@ -123,7 +137,25 @@ def main():
                 handle_hero_movement(event, hero_sprite, wall_sprites)
         
         current_room = handle_room_change(hero_sprite, current_room, wall_sprites)
-        draw_window(hero_sprite_group, wall_sprites)
+        draw_window(wall_sprites, monsters, hero_sprite_group)
+
+
+        #from Timothy's pygame_main.py
+        monster_to_attack = pygame.sprite.spritecollideany(hero_sprite, monsters) #temporarily changed to HeroSprite class hero
+        if monster_to_attack:
+            print(monster_to_attack)
+            if player_attack_button.draw(WIN):
+                print(monster_to_attack)
+                ##hero_sprite.attack(monster_to_attack) - temporarily removed due to lack of attack method
+                monster_to_attack.hp -= 1 #temporarily replaced attack method
+                print(monster_to_attack)
+
+                if monster_to_attack.hp <= 0:
+                    monster_to_attack.kill()
+            
+            player_flee_button.draw(WIN)
+        pygame.display.update()
+        
     pygame.quit()
 
 if __name__ == "__main__":
