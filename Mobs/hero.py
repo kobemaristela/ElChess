@@ -14,15 +14,19 @@ from pygame.locals import (
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 800
 
+HERO_SIZE = 25
+
 class Hero(pygame.sprite.Sprite):
     def __init__(self, name, level=1, hp=3):
         super(Hero, self).__init__()
         self.name = name
         self.level = level
         self.hp = hp
-        self.surf = pygame.Surface((50, 50))
-        self.surf.fill((255, 255, 255))
+        self.surf = pygame.Surface((HERO_SIZE,HERO_SIZE)) #changed size of surface
+        self.surf.fill((0,0, 255)) #changed hero color for visibility on the current map
         self.rect = self.surf.get_rect()
+
+        self.image = self.surf #added for calling Group.draw()
     
     def __str__(self):
         return f'Hero {self.name} - Level: {self.level} Health: {self.hp}'
