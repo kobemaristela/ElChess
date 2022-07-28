@@ -12,7 +12,7 @@ class Game:
         self.map = Map()
 
         #audio
-        self.music = pygame.mixer.Sound('dungeon_music.wav')
+        self.music = pygame.mixer.Sound('./Graphics-Audio/dungeon_music.wav')
         self.music.set_volume(0.5)
         self.music.play(-1)
 

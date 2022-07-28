@@ -1,4 +1,3 @@
-from importlib.resources import path
 import pygame
 from map_constants import *
 
@@ -6,29 +5,29 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load('wall_mid.png').convert_alpha()
+            self.image = pygame.image.load('./Graphics-Audio/wall_mid.png').convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load('wall_left.png').convert_alpha()
+            self.image = pygame.image.load('./Graphics-Audio/wall_left.png').convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load('wall_right.png').convert_alpha()
+            self.image = pygame.image.load('./Graphics-Audio/wall_right.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
-class Floor(pygame.sprite.Sprite):
-    def __init__(self, position, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load('floor.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
+# class Floor(pygame.sprite.Sprite):
+#     def __init__(self, position, groups):
+#         super().__init__(groups)
+#         self.image = pygame.image.load('./Graphics & Audio/floor.png').convert_alpha()
+#         self.rect = self.image.get_rect(topleft = position)
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load('boss_pic.png').convert_alpha()
+        self.image = pygame.image.load('./Graphics-Audio/boss_pic.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load('knight_player.png').convert_alpha()
+        self.image = pygame.image.load('./Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
