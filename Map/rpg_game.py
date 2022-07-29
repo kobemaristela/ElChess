@@ -2,6 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from map_constants import *
 from map_tiles import Map
+from map_tiles import Button
+
 
 class Game:
     def __init__(self) -> None:
@@ -42,6 +44,12 @@ class Game:
 
     def run(self):
         # run and setup game here
+        attack_button_img = pygame.image.load('./Graphics-Audio/attack_button.png').convert_alpha()
+        flee_button_img = pygame.image.load('./Graphics-Audio/flee_button.png').convert_alpha()
+        player_attack_button = Button(50, 450, attack_button_img, 0.65)
+        player_flee_button = Button(450, 450, flee_button_img, 0.65)
+
+
         running = True
         while running:
             for event in pygame.event.get():
@@ -51,6 +59,18 @@ class Game:
                 elif event.type == KEYDOWN:
                     if event.key == K_BACKSPACE:
                         running = False
+
+            # monster_to_attack = pygame.sprite.spritecollideany(hero, monsters)
+            # if monster_to_attack:
+            #     if player_attack_button.draw(screen):
+            #         print(monster_to_attack)
+            #         hero.attack(monster_to_attack)
+            #         print(monster_to_attack)
+
+            #         if monster_to_attack.hp <= 0:
+            #             monster_to_attack.kill()
+                
+            #     player_flee_button.draw(screen)
 
             self.screen.fill(BLACK)
             self.map.run()
