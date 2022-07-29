@@ -1,5 +1,6 @@
 import pygame
 from map_constants import *
+from hero import Hero
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
@@ -78,7 +79,7 @@ class Map:
                 elif col == 'r':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')              
                 elif col == 'p':
-                    self.player = Player((x, y), [self.visible_sprites])
+                    self.player = Hero((x, y), [self.visible_sprites], 'bob')
                 elif col == 'B':
                    Boss((x, y), [self.visible_sprites, self.obstacle_sprites])
                 
