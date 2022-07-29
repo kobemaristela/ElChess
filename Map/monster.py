@@ -12,18 +12,14 @@ from pygame.locals import (
 )
 
 
-SCREEN_HEIGHT = 600
-SCREEN_WIDTH = 800
-
-
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, x, y, level=1, hp=1):
-        super(Monster, self).__init__()
+    def __init__(self, position, groups, level=1, hp=1):
+        super().__init__(groups)
         self.level = level
         self.hp = hp
-        self.surf = pygame.Surface((50, 50))
-        self.surf.fill((255, 0, 0))
-        self.rect = self.surf.get_rect(center=(x, y))
+        self.image = pygame.Surface((50, 50))
+        self.image.fill((255, 0, 0))
+        self.rect = self.image.get_rect(topleft = position)
     
     def __str__(self):
         return f'Monster - Level: {self.level} Health: {self.hp}'
