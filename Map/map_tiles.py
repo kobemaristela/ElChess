@@ -12,13 +12,15 @@ class Wall(pygame.sprite.Sprite):
             self.image = pygame.image.load('./Graphics-Audio/wall_left.png').convert_alpha()
         elif type == 'right':
             self.image = pygame.image.load('./Graphics-Audio/wall_right.png').convert_alpha()
+        elif type == 'goo':
+            self.image = pygame.image.load('./Graphics-Audio/wall_goo.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
-# class Floor(pygame.sprite.Sprite):
-#     def __init__(self, position, groups):
-#         super().__init__(groups)
-#         self.image = pygame.image.load('./Graphics & Audio/floor.png').convert_alpha()
-#         self.rect = self.image.get_rect(topleft = position)
+class Door(pygame.sprite.Sprite):
+   def __init__(self, position, groups):
+        super().__init__(groups)
+        self.image = pygame.image.load('./Graphics-Audio/door.png').convert_alpha()
+        self.rect = self.image.get_rect(topleft = position)
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
@@ -33,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 3
+        self.speed = 5
 
     def keyboard_input(self):
         key_pressed = pygame.key.get_pressed()
@@ -104,7 +106,11 @@ class Map:
                 elif col == 'l':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'left')  
                 elif col == 'r':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')              
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')
+                elif col == 'g':
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'goo')
+                elif col == 'd':
+                    Door((x, y), [self.visible_sprites, self.obstacle_sprites])           
                 elif col == 'p':
                     self.player = Hero((x, y), [self.visible_sprites], 'bob')
                 elif col == 'B':
@@ -122,9 +128,16 @@ class Player_Camera(pygame.sprite.Group):
         self.display_screen = pygame.display.get_surface()
         self.vector_to_keep_player_center = pygame.math.Vector2()
 
+        # instantiate floor
+        self.floor_surf = pygame.image.load('./Graphics-Audio/Floor.png').convert()
+        self.floor_rect = self.floor_surf.get_rect(topleft = (0, 0))
+
     def center_camera_draw(self, player):
         self.vector_to_keep_player_center.x = player.rect.centerx - (WIDTH // 2)
         self.vector_to_keep_player_center.y = player.rect.centery - (HEIGHT // 2)
+
+        floor_pos = self.floor_rect.topleft - self.vector_to_keep_player_center
+        self.display_screen.blit(self.floor_surf, floor_pos)
 
         for sprite in self.sprites():
             camera_position = sprite.rect.topleft - self.vector_to_keep_player_center

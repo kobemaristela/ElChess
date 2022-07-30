@@ -17,8 +17,8 @@ class Monster(pygame.sprite.Sprite):
         super().__init__(groups)
         self.level = level
         self.hp = hp
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((255, 0, 0))
+        self.image = pygame.image.load('./Graphics-Audio/lizard_monster.png').convert_alpha()
+        #self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect(topleft = position)
     
     def __str__(self):
