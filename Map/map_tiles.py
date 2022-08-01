@@ -1,4 +1,5 @@
 import pygame
+import os
 from map_constants import *
 from hero import Hero
 from monster import Monster
@@ -7,11 +8,11 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load('./Graphics-Audio/wall_mid.png').convert_alpha()
+            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_mid.png').convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load('./Graphics-Audio/wall_left.png').convert_alpha()
+            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_left.png').convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load('./Graphics-Audio/wall_right.png').convert_alpha()
+            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_right.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 # class Floor(pygame.sprite.Sprite):
@@ -23,13 +24,13 @@ class Wall(pygame.sprite.Sprite):
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load('./Graphics-Audio/boss_pic.png').convert_alpha()
+        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/boss_pic.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load('./Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
@@ -106,7 +107,7 @@ class Map:
                 elif col == 'r':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')              
                 elif col == 'p':
-                    self.player = Hero((x, y), [self.visible_sprites], 'bob')
+                    self.player = Hero((x, y), [self.visible_sprites],'bob', self.obstacle_sprites)
                 elif col == 'B':
                     Boss((x, y), [self.visible_sprites, self.obstacle_sprites])
                 elif col == 'M':

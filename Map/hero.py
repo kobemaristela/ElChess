@@ -1,5 +1,6 @@
 import pygame
 import random
+import os
 from pygame.locals import (
     RLEACCEL,
     K_UP,
@@ -13,9 +14,9 @@ from pygame.locals import (
 
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self, position, groups, name, level=1, hp=3):
+    def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3):
         super().__init__(groups)
-        self.image = pygame.image.load('./Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
@@ -25,6 +26,7 @@ class Hero(pygame.sprite.Sprite):
         self.level = level
         self.hp = hp
         
+        self.obstacle_sprites = obstacle_sprites
     
     def __str__(self):
         return f'Hero {self.name} - Level: {self.level} Health: {self.hp}'
@@ -56,7 +58,23 @@ class Hero(pygame.sprite.Sprite):
     def move(self, speed):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
-        self.rect.center += self.direction * speed
+        self.rect.x += self.direction.x * speed
+        self.collision("horizontal")
+        self.rect.y += self.direction.y * speed
+        self.collision("vertical")
+    def collision(self, direction):
+        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False)
+        for sprite in collided_sprites:
+            if direction == "horizontal":
+                if self.direction.x > 0:
+                    self.rect.right = sprite.rect.left
+                if self.direction.x < 0:
+                    self.rect.left = sprite.rect.right
+            if direction == "vertical":
+                if self.direction.y > 0:
+                    self.rect.bottom = sprite.rect.top
+                if self.direction.y < 0:
+                    self.rect.top = sprite.rect.bottom
 
     def update(self):
         self.keyboard_input()

@@ -1,4 +1,5 @@
 import pygame, sys
+import os
 from pygame.locals import *
 from map_constants import *
 from map_tiles import Map
@@ -14,7 +15,7 @@ class Game:
         self.map = Map()
 
         #audio
-        self.music = pygame.mixer.Sound('./Graphics-Audio/dungeon_music.wav')
+        self.music = pygame.mixer.Sound(os.pardir + '/Graphics-Audio/dungeon_music.wav')
         self.music.set_volume(0.5)
         self.music.play(-1)
 
@@ -24,6 +25,7 @@ class Game:
         welcome_text = title_font.render('Welcome to ELCHESS', True, WHITE)
         click_caption = font.render('-Click anywhere to start game-', True, RED) #cyan
         backspace_caption = font.render('-Backspace to QUIT game-', True, GRAY) #magenta
+
 
         play = True
         while play:
@@ -44,8 +46,8 @@ class Game:
 
     def run(self):
         # run and setup game here
-        attack_button_img = pygame.image.load('./Graphics-Audio/attack_button.png').convert_alpha()
-        flee_button_img = pygame.image.load('./Graphics-Audio/flee_button.png').convert_alpha()
+        attack_button_img = pygame.image.load(os.pardir + '/Graphics-Audio/attack_button.png').convert_alpha()
+        flee_button_img = pygame.image.load(os.pardir + '/Graphics-Audio/flee_button.png').convert_alpha()
         player_attack_button = Button(50, 450, attack_button_img, 0.65)
         player_flee_button = Button(450, 450, flee_button_img, 0.65)
 
