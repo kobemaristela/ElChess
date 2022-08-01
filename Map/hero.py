@@ -11,16 +11,15 @@ from pygame.locals import (
     QUIT
 )
 
-
 class Hero(pygame.sprite.Sprite):
-    def __init__(self, position, groups, name, level=1, hp=3):
+    def __init__(self, position, groups, name, level=1, hp=3, health=100):
         super().__init__(groups)
         self.image = pygame.image.load('./Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
         self.speed = 3
-
+        self.health = health
         self.name = name
         self.level = level
         self.hp = hp
@@ -61,3 +60,7 @@ class Hero(pygame.sprite.Sprite):
     def update(self):
         self.keyboard_input()
         self.move(self.speed)
+
+    def health_scale(self, health):
+
+        return

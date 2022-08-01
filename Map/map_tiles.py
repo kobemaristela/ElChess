@@ -2,6 +2,7 @@ import pygame
 from map_constants import *
 from hero import Hero
 from monster import Monster
+from player_ui import Player_UI
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
@@ -96,6 +97,9 @@ class Map:
         self.obstacle_sprites = pygame.sprite.Group()
         self.make_map()
 
+        #player UI
+        self.player_ui = Player_UI()
+
     def make_map(self):
         for row_index, row in enumerate(RPG_MAP):
             for col_index, col in enumerate(row):
@@ -121,6 +125,7 @@ class Map:
     def run(self):
         self.visible_sprites.center_camera_draw(self.player)
         self.visible_sprites.update()
+        self.player_ui.display_health_bar(self.player)
 
 class Player_Camera(pygame.sprite.Group):
     def __init__(self):
