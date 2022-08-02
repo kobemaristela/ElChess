@@ -4,7 +4,7 @@ from pygame.locals import *
 from map_constants import *
 from map_tiles import Map
 from map_tiles import Button
-
+from pathlib import Path
 
 class Game:
     def __init__(self) -> None:

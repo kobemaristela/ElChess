@@ -1,6 +1,7 @@
 import pygame
 import random
 import os
+import pathlib
 from support import import_folder
 from pygame.locals import (
     RLEACCEL,
@@ -17,9 +18,10 @@ from pygame.locals import (
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3):
         super().__init__(groups)
-        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
-
+        print('\n')
+        print(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png')
         self.hitbox = self.rect
         self.import_player_assets()
         self.status = 'right'
@@ -67,7 +69,7 @@ class Hero(pygame.sprite.Sprite):
             self.direction.x = 0
     
     def import_player_assets(self):
-        player_path = './Graphics-Audio/player/'
+        player_path = os.pardir + '/Graphics-Audio/player/'
         self.animations = {'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [], 
                             'right': [], 'left': [], 'up': [], 'down': []}
         for animation in self.animations.keys():
@@ -87,7 +89,7 @@ class Hero(pygame.sprite.Sprite):
             self.frame_index = 0
         if animation:
             self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center=self.hitbox.center)
+
     
     def move(self, speed):
         if self.direction.magnitude() != 0:
@@ -98,13 +100,8 @@ class Hero(pygame.sprite.Sprite):
         self.collision("vertical")
 
 
-        self.hitbox.x += self.direction.x * speed
-        self.hitbox.y += self.direction.y * speed
-
-
-
     def collision(self, direction):
-        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False)
+        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
             if direction == "horizontal":
                 if self.direction.x > 0:
@@ -123,4 +120,5 @@ class Hero(pygame.sprite.Sprite):
     def update(self):
         self.keyboard_input()
         self.get_status()
+        self.animate()
         self.move(self.speed)
