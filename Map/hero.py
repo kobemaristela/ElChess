@@ -1,6 +1,5 @@
 import pygame
 import random
-import os
 import pathlib
 from support import import_folder
 from pygame.locals import (
@@ -13,7 +12,7 @@ from pygame.locals import (
     KEYDOWN,
     QUIT
 )
-
+from monster import Monster
 
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3):
@@ -69,11 +68,11 @@ class Hero(pygame.sprite.Sprite):
             self.direction.x = 0
     
     def import_player_assets(self):
-        player_path = os.pardir + '/Graphics-Audio/player/'
+        player_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/player/'
         self.animations = {'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [], 
                             'right': [], 'left': [], 'up': [], 'down': []}
         for animation in self.animations.keys():
-            full_path = player_path + animation
+            full_path = player_path / animation
             self.animations[animation] = import_folder(full_path)
         print(self.animations)
     
@@ -103,6 +102,9 @@ class Hero(pygame.sprite.Sprite):
     def collision(self, direction):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
+            #could potentially handle monster battles below
+            if type(sprite) == Monster:
+                print("monster collision\n")
             if direction == "horizontal":
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left

@@ -1,38 +1,37 @@
 import pygame
-import os
+import pathlib
 from map_constants import *
 from hero import Hero
 from monster import Monster
-
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_mid.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_mid.png').convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_left.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_left.png').convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_right.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_right.png').convert_alpha()
         elif type == 'goo':
-            self.image = pygame.image.load(os.pardir + '/Graphics-Audio/wall_goo.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_goo.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 class Door(pygame.sprite.Sprite):
    def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/door.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/boss_pic.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/boss_pic.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.direction = pygame.math.Vector2()
@@ -130,7 +129,7 @@ class Player_Camera(pygame.sprite.Group):
         self.vector_to_keep_player_center = pygame.math.Vector2()
 
         # instantiate floor
-        self.floor_surf = pygame.image.load(os.pardir + '/Graphics-Audio/Floor.png').convert()
+        self.floor_surf = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/Floor.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft = (0, 0))
 
     def center_camera_draw(self, player):

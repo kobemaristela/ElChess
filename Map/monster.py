@@ -1,6 +1,6 @@
 import pygame
 import random
-import os
+import pathlib
 
 from pygame.locals import (
     RLEACCEL,
@@ -19,7 +19,7 @@ class Monster(pygame.sprite.Sprite):
         super().__init__(groups)
         self.level = level
         self.hp = hp
-        self.image = pygame.image.load(os.pardir + '/Graphics-Audio/lizard_monster.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/lizard_monster.png').convert_alpha()
         #self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect(topleft = position)
     

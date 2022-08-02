@@ -1,10 +1,10 @@
 import pygame, sys
-import os
+import pathlib
 from pygame.locals import *
 from map_constants import *
 from map_tiles import Map
 from map_tiles import Button
-from pathlib import Path
+
 
 class Game:
     def __init__(self) -> None:
@@ -15,7 +15,7 @@ class Game:
         self.map = Map()
 
         #audio
-        self.music = pygame.mixer.Sound(os.pardir + '/Graphics-Audio/dungeon_music.wav')
+        self.music = pygame.mixer.Sound(pathlib.Path(__file__).parent.parent /  'Graphics-Audio/dungeon_music.wav')
         self.music.set_volume(0.5)
         self.music.play(-1)
 
@@ -46,8 +46,8 @@ class Game:
 
     def run(self):
         # run and setup game here
-        attack_button_img = pygame.image.load(os.pardir + '/Graphics-Audio/attack_button.png').convert_alpha()
-        flee_button_img = pygame.image.load(os.pardir + '/Graphics-Audio/flee_button.png').convert_alpha()
+        attack_button_img = pygame.image.load(pathlib.Path(__file__).parent.parent  / 'Graphics-Audio/attack_button.png').convert_alpha()
+        flee_button_img = pygame.image.load(pathlib.Path(__file__).parent.parent  / 'Graphics-Audio/flee_button.png').convert_alpha()
         player_attack_button = Button(50, 450, attack_button_img, 0.65)
         player_flee_button = Button(450, 450, flee_button_img, 0.65)
 
