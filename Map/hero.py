@@ -1,4 +1,5 @@
-import pygame
+import pathlib
+import pygame, os
 import random
 from support import import_folder
 from pygame.locals import (
@@ -15,7 +16,7 @@ from pygame.locals import (
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, level=1, hp=3, health=100):
         super().__init__(groups)
-        self.image = pygame.image.load('./Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / ('Graphics-Audio/knight_player.png')).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.hitbox = self.rect

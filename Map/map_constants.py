@@ -6,8 +6,8 @@ RED = (255, 0, 0)
 GRAY = (150, 150, 150)
 BROWN = (139, 105, 105)
 
-HEALTH_BAR_WIDTH = 100
-HEALTH_BAR_HEIGHT = 25
+HEALTH_BAR_WIDTH, BG_WIDTH = 100, 110
+HEALTH_BAR_HEIGHT, BG_HEIGHT = 25, 35
 
 RPG_MAP = [
 ['w','w','g','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','l'],
