@@ -31,40 +31,6 @@ class Boss(pygame.sprite.Sprite):
         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/boss_pic.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
-
-        self.direction = pygame.math.Vector2()
-        self.speed = 5
-
-    def keyboard_input(self):
-        key_pressed = pygame.key.get_pressed()
-        if key_pressed[pygame.K_UP]:
-            self.direction.y = -1
-        elif key_pressed[pygame.K_DOWN]:
-            self.direction.y = 1
-        else:
-            self.direction.y = 0
-        
-        if key_pressed[pygame.K_RIGHT]:
-            self.direction.x = 1
-        elif key_pressed[pygame.K_LEFT]:
-            self.direction.x = -1
-        else:
-            self.direction.x = 0
-
-    def move(self, speed):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
-        self.rect.center += self.direction * speed
-
-    def update(self):
-        self.keyboard_input()
-        self.move(self.speed)
-
 class Button():
     def __init__(self, x, y, image, scale):
         width = image.get_width()

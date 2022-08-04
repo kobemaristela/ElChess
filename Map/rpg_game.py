@@ -26,7 +26,6 @@ class Game:
         click_caption = font.render('-Click anywhere to start game-', True, RED) #cyan
         backspace_caption = font.render('-Backspace to QUIT game-', True, GRAY) #magenta
 
-
         play = True
         while play:
             self.screen.blit(welcome_text, (110, 80))
@@ -78,6 +77,7 @@ class Game:
             self.map.run()
             if self.map.player.health <= 0:
                 running = False
+                self.game_over()
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -90,7 +90,7 @@ class Game:
         play = True
         while play:
             self.screen.fill(BLACK)
-            self.screen.blit(game_over_text, (120, 100))
+            self.screen.blit(game_over_text, (115, 100))
             self.screen.blit(backspace_caption, (180, 350))
             pygame.display.flip()
 
@@ -104,4 +104,3 @@ if __name__ == "__main__":
     game = Game()
     game.homescreen()
     game.run()
-    game.game_over()

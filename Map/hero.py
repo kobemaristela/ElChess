@@ -105,7 +105,7 @@ class Hero(pygame.sprite.Sprite):
         for sprite in collided_sprites:
             #could potentially handle monster battles below
             if type(sprite) == Monster:
-                print("monster collision\n")
+                # print("monster collision\n")
                 self.health -= 0.5
             if direction == "horizontal":
                 if self.direction.x > 0:
