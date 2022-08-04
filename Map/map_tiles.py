@@ -1,8 +1,11 @@
-import pygame
+import pygame, sys
+from pygame.locals import *
 import pathlib
 from map_constants import *
 from hero import Hero
 from monster import Monster
+from player_ui import Player_UI
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
@@ -27,40 +30,6 @@ class Boss(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/boss_pic.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
-
-        self.direction = pygame.math.Vector2()
-        self.speed = 5
-
-    def keyboard_input(self):
-        key_pressed = pygame.key.get_pressed()
-        if key_pressed[pygame.K_UP]:
-            self.direction.y = -1
-        elif key_pressed[pygame.K_DOWN]:
-            self.direction.y = 1
-        else:
-            self.direction.y = 0
-        
-        if key_pressed[pygame.K_RIGHT]:
-            self.direction.x = 1
-        elif key_pressed[pygame.K_LEFT]:
-            self.direction.x = -1
-        else:
-            self.direction.x = 0
-
-    def move(self, speed):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
-        self.rect.center += self.direction * speed
-
-    def update(self):
-        self.keyboard_input()
-        self.move(self.speed)
 
 class Button():
     def __init__(self, x, y, image, scale):
@@ -96,6 +65,9 @@ class Map:
         self.obstacle_sprites = pygame.sprite.Group()
         self.make_map()
 
+        #player UI
+        self.player_ui = Player_UI()
+
     def make_map(self):
         for row_index, row in enumerate(RPG_MAP):
             for col_index, col in enumerate(row):
@@ -121,6 +93,7 @@ class Map:
     def run(self):
         self.visible_sprites.center_camera_draw(self.player)
         self.visible_sprites.update()
+        self.player_ui.display_health_bar(self.player, self.player.health, 100)
 
 class Player_Camera(pygame.sprite.Group):
     def __init__(self):

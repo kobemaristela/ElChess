@@ -26,7 +26,6 @@ class Game:
         click_caption = font.render('-Click anywhere to start game-', True, RED) #cyan
         backspace_caption = font.render('-Backspace to QUIT game-', True, GRAY) #magenta
 
-
         play = True
         while play:
             self.screen.blit(welcome_text, (110, 80))
@@ -76,8 +75,30 @@ class Game:
 
             self.screen.fill(BLACK)
             self.map.run()
+            if self.map.player.health <= 0:
+                running = False
+                self.game_over()
             pygame.display.update()
             self.clock.tick(FPS)
+
+    def game_over(self):
+        title_font = pygame.font.SysFont("inkfree", 115)
+        font = pygame.font.SysFont("inkfree", 40)
+        game_over_text = title_font.render('GAME OVER', True, RED)
+        backspace_caption = font.render('-Backspace to EXIT game-', True, GRAY) #magenta
+
+        play = True
+        while play:
+            self.screen.fill(BLACK)
+            self.screen.blit(game_over_text, (115, 100))
+            self.screen.blit(backspace_caption, (180, 350))
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key == K_BACKSPACE:
+                        play = False
+                        sys.exit()
 
 if __name__ == "__main__":
     game = Game()

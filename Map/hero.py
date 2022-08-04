@@ -1,4 +1,5 @@
-import pygame
+import pathlib
+import pygame, os
 import random
 import pathlib
 from support import import_folder
@@ -15,7 +16,7 @@ from pygame.locals import (
 from monster import Monster
 
 class Hero(pygame.sprite.Sprite):
-    def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3):
+    def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3, health=100):
         super().__init__(groups)
         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
@@ -29,7 +30,7 @@ class Hero(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 3
-
+        self.health = health
         self.name = name
         self.level = level
         self.hp = hp
@@ -104,7 +105,8 @@ class Hero(pygame.sprite.Sprite):
         for sprite in collided_sprites:
             #could potentially handle monster battles below
             if type(sprite) == Monster:
-                print("monster collision\n")
+                # print("monster collision\n")
+                self.health -= 0.5
             if direction == "horizontal":
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left
@@ -116,8 +118,6 @@ class Hero(pygame.sprite.Sprite):
                 if self.direction.y < 0:
                     self.rect.top = sprite.rect.bottom
         
-
-
 
     def update(self):
         self.keyboard_input()
