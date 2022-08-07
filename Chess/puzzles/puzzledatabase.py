@@ -1,14 +1,14 @@
 import multiprocessing as mp
-from pathlib import Path
-
 import pyarrow.parquet as arrowParquet
 
+from pathlib import Path
 from fenparser import FenParser
 from parquetconverter import ParquetConverter
+from constants import DATABASE_CSV
 
 
 class PuzzleDatabase():
-    def __init__(self, database, search=None, workers=mp.cpu_count()):
+    def __init__(self, search, database=DATABASE_CSV, workers=mp.cpu_count()):
         self.database = database
         self.workers = workers
         self.search = search
@@ -56,9 +56,10 @@ class PuzzleDatabase():
             
         return self.results
 
+
 if __name__ == "__main__":
     cwd = Path(__file__).parent.resolve()
-    db = PuzzleDatabase(cwd.joinpath('lichess_db_puzzle.csv'),'Pp')
+    db = PuzzleDatabase(cwd.joinpath('lichess_db_puzzle.csv'),'RrKk')
     db.main()
 
     db.read_results()

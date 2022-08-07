@@ -1,5 +1,6 @@
-# import pygame
-from board_constants import *
+import pygame
+from constants import *
+from puzzles.puzzledatabase import PuzzleDatabase
 import chess
 import chess.svg
 
