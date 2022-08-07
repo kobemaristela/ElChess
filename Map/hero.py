@@ -34,6 +34,7 @@ class Hero(pygame.sprite.Sprite):
         self.name = name
         self.level = level
         self.hp = hp
+        self.attacking = False
         
         self.obstacle_sprites = obstacle_sprites
     
@@ -44,10 +45,10 @@ class Hero(pygame.sprite.Sprite):
         return f'Hero(name={self.name}, level={self.level}, hp={self.hp})'
     
     def attack(self, other):
-        attack_damage = random.choice(range(self.level + 2, self.level + 5))
-        other.hp -= attack_damage
+        #attack_damage = random.choice(range(self.level + 2, self.level + 5))
+        if self.attacking:
+            pass
 
-    
     def keyboard_input(self):
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_UP]:
@@ -67,10 +68,15 @@ class Hero(pygame.sprite.Sprite):
             self.status = 'left'
         else:
             self.direction.x = 0
+
+        # attack input
+        if key_pressed[pygame.K_SPACE] and not self.attacking:
+            self.attacking = True
     
     def import_player_assets(self):
         player_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/player/'
-        self.animations = {'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [], 
+        self.animations = {'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
+                            'right_attack': [], 'left_attack': [], 'up_attack': [], 'down_attack': [],
                             'right': [], 'left': [], 'up': [], 'down': []}
         for animation in self.animations.keys():
             full_path = player_path / animation
@@ -79,8 +85,19 @@ class Hero(pygame.sprite.Sprite):
     
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:
-            if 'idle' not in self.status:
+            if 'idle' not in self.status and 'attack' not in self.status:
                 self.status += '_idle'
+        if self.attacking:
+            self.direction.x, self.direction.y = 0, 0
+            if not 'attack' in self.status:
+                if 'idle' in self.status:
+                    self.status = self.status.replace('idle', 'attack')
+                else:
+                    self.status += '_attack'
+        else:
+            if 'attack' in self.status:
+                self.status.replace('_attack', '')
+        self.attacking = False
     
     def animate(self):
         animation = self.animations[self.status]
