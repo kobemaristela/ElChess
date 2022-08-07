@@ -1,3 +1,5 @@
+from pathlib import Path
+
 X, Y = 560, 560
 
 WHITE = (255, 255, 255)
@@ -9,3 +11,29 @@ MAGENTA = (255, 0, 255)
 RED = (255, 0, 0)
 
 board_colors = [BLUE, WHITE, RED, CYAN, MAGENTA]
+
+
+
+# Directory
+CURRENTDIRECTORY = Path(__file__).parent.resolve()
+
+
+## CSV Database
+DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/lichess_db_puzzle.csv')
+
+
+## White Pieces
+WHITEKING = CURRENTDIRECTORY.joinpath(r'assets/chess-king-white.png')
+WHITEQUEEN = CURRENTDIRECTORY.joinpath(r'assets/chess-queen-white.png')
+WHITEBISHOP = CURRENTDIRECTORY.joinpath(r'assets/chess-bishop-white.png')
+WHITEKNIGHT = CURRENTDIRECTORY.joinpath(r'assets/chess-knight-white.png')
+WHITEPAWN = CURRENTDIRECTORY.joinpath(r'assets/chess-pawn-white.png')
+WHITEROOK = CURRENTDIRECTORY.joinpath(r'assets/chess-rook-white.png')
+
+## Black Pieces
+BLACKKING = CURRENTDIRECTORY.joinpath(r'assets/chess-king-black.png')
+BLACKQUEEN = CURRENTDIRECTORY.joinpath(r'assets/chess-queen-black.png')
+BLACKBISHOP = CURRENTDIRECTORY.joinpath(r'assets/chess-bishop-black.png')
+BLACKKNIGHT = CURRENTDIRECTORY.joinpath(r'assets/chess-knight-black.png')
+BLACKPAWN = CURRENTDIRECTORY.joinpath(r'assets/chess-pawn-black.png')
+BLACKROOK = CURRENTDIRECTORY.joinpath(r'assets/chess-rook-black.png')
