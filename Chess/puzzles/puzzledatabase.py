@@ -27,13 +27,16 @@ class PuzzleDatabase():
         pool = mp.Pool(self.workers)
 
         for chunk in table:
+            if len(self.easy) > 1000 and len(self.normal) > 1000 and len(self.hard) > 1000:
+                break
             for line in chunk:
+                print(len(self.easy), len(self.normal), len(self.hard))
+                if len(self.easy) > 1000 and len(self.normal) > 1000 and len(self.hard) > 1000:
+                    break
                 pool.apply_async(self._process_write_puzzle, [line.as_py()], callback=self._record_results)
 
         pool.close()
         pool.join()
-
-        print(len(self.easy), len(self.normal), len(self.hard))
 
 
     def _process_string(self, fen):
@@ -51,6 +54,8 @@ class PuzzleDatabase():
 
         if rating < 2000:
             return puzzle[1:4]
+        
+        return None
         
 
     def main(self):
@@ -74,17 +79,17 @@ class PuzzleDatabase():
         if puzzle:
             rating = int(puzzle[2])
 
-            print(rating)
-            if rating <= 800:
-                print(rating, puzzle)
+            # print(rating)
+            if rating <= 800 and len(self.easy) <= 1000:
+                # print(rating, puzzle)
                 self.easy.append(puzzle)
             
-            if rating > 800 and rating < 1400:
-                print(rating, puzzle)
+            if rating > 800 and rating < 1400 and len(self.normal) <= 1000:
+                # print(rating, puzzle)
                 self.normal.append(puzzle)
             
-            if rating >= 1400 and rating < 2000:
-                print(rating, puzzle)
+            if rating >= 1400 and rating < 2000 and len(self.hard) <= 1000:
+                # print(rating, puzzle)
                 self.hard.append(puzzle)
 
 
