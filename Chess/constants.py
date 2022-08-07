@@ -17,6 +17,8 @@ board_colors = [BLUE, WHITE, RED, CYAN, MAGENTA]
 # Directory
 CURRENTDIRECTORY = Path(__file__).parent.resolve()
 
+GAMEOPTIONS = CURRENTDIRECTORY.parent.joinpath('settings.conf')
+
 
 ## CSV Database
 DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/lichess_db_puzzle.csv')

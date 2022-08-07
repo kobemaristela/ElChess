@@ -1,23 +1,37 @@
 import pygame
+import configparser
 from pathlib import Path
 from constants import *
+import collections
 
 
 class ChessGame():
-    def __init__(self, game_type, difficulty, database=None):
+    def __init__(self, database=None):
         # Initialize game
         pygame.display.init()
         pygame.font.init()
 
 
         # Initialize game settings
-        self.set_game_type(game_type)
-        self.set_difficulty(difficulty)
+        self.settings = self.load_settings()
+        self.set_difficulty(self.settings['Game']['Difficulty'])
 
-        self.database = database
+        # Initialize database
+        self.database = self.load_database(database)
 
 
-    def set_difficulty(self, difficulty: str) -> None:
+    def __load_settings(self):
+        parser = configparser.RawConfigParser()
+        parser.read(GAMEOPTIONS)
+
+        section_dict = collections.defaultdict()
+        for section in parser.sections():
+            section_dict[section] = dict(parser.items(section))
+    
+        return section_dict
+
+
+    def _set_difficulty(self, difficulty: str) -> None:
         rating = {"easy": 800, "normal": 1100, "hard": 1400}    # Set difficulty rating for puzzles
 
         if difficulty not in rating.keys():
@@ -26,12 +40,16 @@ class ChessGame():
         self.rating = rating[difficulty]
 
 
-    def set_game_type(self, game_type):
+    def _set_game_type(self, game_type):
         if game_type not in ['normal', 'puzzle']:
             raise ValueError(f"Invalid Game Type: {game_type}")
 
         self.game_type = game_type
     
 
-    def initialize_database(self, database):
+    
+    def _load_database(self, database):
+        if not database:
+            return PuzzleDatabase()
         
+        return PuzzleDatabase(database=database)

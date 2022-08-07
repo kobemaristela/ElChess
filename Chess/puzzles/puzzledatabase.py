@@ -8,7 +8,7 @@ from constants import DATABASE_CSV
 
 
 class PuzzleDatabase():
-    def __init__(self, search, database=DATABASE_CSV, workers=mp.cpu_count()):
+    def __init__(self, search=None, database=DATABASE_CSV, workers=mp.cpu_count()):
         self.database = database
         self.workers = workers
         self.search = search
