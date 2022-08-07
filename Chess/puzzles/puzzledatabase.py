@@ -2,9 +2,9 @@ import multiprocessing as mp
 import pyarrow.parquet as arrowParquet
 
 from pathlib import Path
-from fenparser import FenParser
-from parquetconverter import ParquetConverter
 from constants import DATABASE_CSV
+from .fenparser import FenParser
+from .parquetconverter import ParquetConverter
 
 
 class PuzzleDatabase():

@@ -3,6 +3,7 @@ import configparser
 from pathlib import Path
 from constants import *
 import collections
+from puzzles.puzzledatabase import PuzzleDatabase
 
 
 class ChessGame():
@@ -14,13 +15,13 @@ class ChessGame():
 
         # Initialize game settings
         self.settings = self.load_settings()
-        self.set_difficulty(self.settings['Game']['Difficulty'])
+        self.set_difficulty(self.settings['Game']['difficulty'])
 
         # Initialize database
         self.database = self.load_database(database)
 
 
-    def __load_settings(self):
+    def load_settings(self):
         parser = configparser.RawConfigParser()
         parser.read(GAMEOPTIONS)
 
@@ -31,7 +32,7 @@ class ChessGame():
         return section_dict
 
 
-    def _set_difficulty(self, difficulty: str) -> None:
+    def set_difficulty(self, difficulty: str) -> None:
         rating = {"easy": 800, "normal": 1100, "hard": 1400}    # Set difficulty rating for puzzles
 
         if difficulty not in rating.keys():
@@ -40,7 +41,7 @@ class ChessGame():
         self.rating = rating[difficulty]
 
 
-    def _set_game_type(self, game_type):
+    def set_game_type(self, game_type):
         if game_type not in ['normal', 'puzzle']:
             raise ValueError(f"Invalid Game Type: {game_type}")
 
@@ -48,8 +49,9 @@ class ChessGame():
     
 
     
-    def _load_database(self, database):
+    def load_database(self, database):
         if not database:
             return PuzzleDatabase()
         
         return PuzzleDatabase(database=database)
+
