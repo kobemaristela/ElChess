@@ -21,8 +21,10 @@ GAMEOPTIONS = CURRENTDIRECTORY.parent.joinpath('settings.conf')
 
 
 ## CSV Database
-DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/lichess_db_puzzle.csv')
-
+DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/database/lichess_db_puzzle.csv')
+EASY_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/easy_db.csv')
+NORMAL_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/normal_db.csv')
+HARD_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/hard_db.csv')
 
 ## White Pieces
 WHITEKING = CURRENTDIRECTORY.joinpath(r'assets/chess-king-white.png')

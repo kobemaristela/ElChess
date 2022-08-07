@@ -20,6 +20,8 @@ class ChessGame():
         # Initialize database
         self.database = self.load_database(database)
 
+        
+
 
     def load_settings(self):
         parser = configparser.RawConfigParser()
