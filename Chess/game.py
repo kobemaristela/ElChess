@@ -20,7 +20,10 @@ class ChessGame():
         # Initialize database
         self.database = self.load_database(database)
 
-        
+        self.database.main()
+        self.database.write_results()
+
+
 
 
     def load_settings(self):
@@ -57,3 +60,4 @@ class ChessGame():
         
         return PuzzleDatabase(database=database)
 
+ChessGame()
