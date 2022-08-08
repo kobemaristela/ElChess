@@ -15,13 +15,14 @@ from pygame.locals import (
 
 
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, position, groups, level=1, hp=1):
+    def __init__(self, position, groups, level=1, hp=100):
         super().__init__(groups)
         self.level = level
         self.hp = hp
         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/lizard_monster.png').convert_alpha()
-        #self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect(topleft = position)
+
+        self.health = hp
     
     def __str__(self):
         return f'Monster - Level: {self.level} Health: {self.hp}'
@@ -32,3 +33,9 @@ class Monster(pygame.sprite.Sprite):
     def attack(self, other):
         attack_damage = random.choice(range(self.level, self.level + 3))
         other.hp -= attack_damage
+
+    def get_health(self):
+        #if hit by hero object
+            # self.health -= 1
+        # need a bar or something to show monster health or something
+        pass
