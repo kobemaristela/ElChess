@@ -65,7 +65,7 @@ class FenParser():
         return [self.__parse_rank(rank) for rank in ranks]
 
     def search_piece(self, piece):
-        re_pieces = re.compile(f"^[Kk{piece}1-8/]+$")
+        re_pieces = re.compile(f"^[{piece}1-8/]+$")
         res = re_pieces.match(self.pieces)
         return True if res else False
 

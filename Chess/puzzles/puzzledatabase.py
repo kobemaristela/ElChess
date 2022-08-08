@@ -16,6 +16,7 @@ class PuzzleDatabase():
         self.easy = []
         self.normal = []
         self.hard = []
+        self.puzzles = {'KkpP': 0, 'KkPpNn': 0, 'KkPpNnBb': 0, 'KkPpNnBbRr': 0, 'KkPpNnBbRrQq': 0}
 
 
     """
@@ -39,7 +40,7 @@ class PuzzleDatabase():
         pool.join()
 
 
-    def _process_string(self, fen):
+    def _process_find_string(self, fen):
         fen_str = fen.split(',')[1]
         fen_parser = FenParser(fen_str)
         if fen_parser.search_piece(self.search):
@@ -47,14 +48,19 @@ class PuzzleDatabase():
 
 
     def _process_write_puzzle(self, puzzles):
-        if not puzzles:
-            return None
-        puzzle = puzzles.split(',')
-        rating = int(puzzle[3])
+        if puzzles:
+            puzzle = puzzles.split(',')
+            rating = int(puzzle[3])
 
-        if rating < 2000:
-            return puzzle[1:4]
-        
+            
+            fen_parser = FenParser(puzzle[1])
+            for search in ['KkPp', 'KkPpNn', 'KkPpNnBb', 'KkPpNnBbRr', 'KkPpNnBbRrQq']:
+                print(f"Current Readings: {self.puzzles}")
+                if fen_parser.search_piece(search):
+                    print(f"My count: {self.puzzles[search]} for {search}")
+
+                    if rating < 2000:
+                        return puzzle[1:4]
         return None
         
 
@@ -78,9 +84,9 @@ class PuzzleDatabase():
     def _record_results(self, puzzle):
         if puzzle:
             rating = int(puzzle[2])
-
-            # print(rating)
-            if rating <= 800 and len(self.easy) <= 1000:
+            print(f"Current Readings: {self.puzzles}")
+            self.puzzles[search] += 1
+            if rating <= 800 and len(self.easy) <= 1000: 
                 # print(rating, puzzle)
                 self.easy.append(puzzle)
             
@@ -91,6 +97,7 @@ class PuzzleDatabase():
             if rating >= 1400 and rating < 2000 and len(self.hard) <= 1000:
                 # print(rating, puzzle)
                 self.hard.append(puzzle)
+        return None
 
 
     def read_results(self, clear_results=False):
@@ -122,11 +129,3 @@ class PuzzleDatabase():
             with open(HARD_DATABASE, 'w') as f:
                 writer = csv.writer(f)
                 writer.writerows(self.hard)
-
-
-
-if __name__ == "__main__":
-    db = PuzzleDatabase()
-    db.main()
-
-    db.write_results()
