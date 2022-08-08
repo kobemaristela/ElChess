@@ -20,10 +20,6 @@ class ChessGame():
         # Initialize database
         self.database = self.load_database(database)
 
-        self.database.main()
-        self.database.write_results()
-
-
 
 
     def load_settings(self):
@@ -55,9 +51,14 @@ class ChessGame():
 
     
     def load_database(self, database):
-        if not database:
-            return PuzzleDatabase()
+        db = {'easy': EASY_DATABASE, 'normal': NORMAL_DATABASE, 'hard': HARD_DATABASE}
+        if database:
+            return PuzzleDatabase(database=database)
+
+        if self.settings['Game']['difficulty'] in db.keys():
+
+            return PuzzleDatabase(db[self.settings['Game']['difficulty']])
         
-        return PuzzleDatabase(database=database)
+        return PuzzleDatabase()
 
 ChessGame()
