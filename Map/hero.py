@@ -106,7 +106,6 @@ class Hero(pygame.sprite.Sprite):
             self.frame_index = 0
         if animation:
             self.image = animation[int(self.frame_index)]
-
     
     def move(self, speed):
         if self.direction.magnitude() != 0:
@@ -121,9 +120,13 @@ class Hero(pygame.sprite.Sprite):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
             #could potentially handle monster battles below
-            if type(sprite) == Monster:
-                # print("monster collision\n")
+            if type(sprite) == Monster and self.attacking:
+                print('attacking monster')
+                Monster.get_health(sprite)
+            elif type(sprite) == Monster:
+                print("monster collision\n")
                 self.health -= 0.5
+
             if direction == "horizontal":
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left
@@ -138,6 +141,7 @@ class Hero(pygame.sprite.Sprite):
 
     def update(self):
         self.keyboard_input()
-        self.get_status()
+        #self.get_status()
         self.animate()
         self.move(self.speed)
+        self.get_status()

@@ -35,7 +35,15 @@ class Monster(pygame.sprite.Sprite):
         other.hp -= attack_damage
 
     def get_health(self):
-        #if hit by hero object
-            # self.health -= 1
+        self.health -= 5
         # need a bar or something to show monster health or something
-        pass
+        self.check_death()
+        
+    def check_death(self):
+        if self.health <= 0:
+            self.kill()
+        else:
+            pass
+
+    def update(self):
+        self.check_death()
