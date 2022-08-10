@@ -15,6 +15,9 @@ from pygame.locals import (
 )
 from monster import Monster
 
+#added to fix collision issue (overlap)
+PADDING_CONST = 20
+
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3, health=100):
         super().__init__(groups)
@@ -100,19 +103,23 @@ class Hero(pygame.sprite.Sprite):
         self.collision("vertical")
 
 
+
     def collision(self, direction):
-        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
+        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, custom_collide)
         for sprite in collided_sprites:
             #could potentially handle monster battles below
             if type(sprite) == Monster:
                 # print("monster collision\n")
                 self.health -= 0.5
-            if direction == "horizontal":
+                sprite.hp -= 0.1
+                if sprite.hp < 0:
+                    sprite.kill()
+            elif direction == "horizontal":
                 if self.direction.x > 0:
-                    self.rect.right = sprite.rect.left
+                    self.rect.right = sprite.rect.left - PADDING_CONST
                 if self.direction.x < 0:
                     self.rect.left = sprite.rect.right
-            if direction == "vertical":
+            elif direction == "vertical":
                 if self.direction.y > 0:
                     self.rect.bottom = sprite.rect.top
                 if self.direction.y < 0:
@@ -124,3 +131,8 @@ class Hero(pygame.sprite.Sprite):
         self.get_status()
         self.animate()
         self.move(self.speed)
+
+#fixes overlap collision
+def custom_collide(hero_sprite: Hero, sprite: pygame.sprite.Sprite) -> bool:
+    collision_rect = pygame.rect.Rect(sprite.rect.left - PADDING_CONST, sprite.rect.top, sprite.rect.width + PADDING_CONST,sprite.rect.height)
+    return collision_rect.colliderect(hero_sprite.rect)
