@@ -63,6 +63,8 @@ class Map:
 
         self.visible_sprites = Player_Camera()
         self.obstacle_sprites = pygame.sprite.Group()
+        self.attack_sprites = pygame.sprite.Group()
+        self.attackable_sprites = pygame.sprite.Group()
         self.make_map()
 
         #player UI
@@ -86,13 +88,23 @@ class Map:
                 elif col == 'p':
                     self.player = Hero((x, y), [self.visible_sprites],'bob', self.obstacle_sprites)
                 elif col == 'B':
-                    Boss((x, y), [self.visible_sprites, self.obstacle_sprites])
+                    Boss((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites])
                 elif col == 'M':
-                    Monster((x, y), [self.visible_sprites, self.obstacle_sprites])
+                    Monster((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites])
+
+    # def player_attack_logic(self):
+    #     if self.attack_sprites:
+    #         for attack_sprite in self.attack_sprites:
+    #             collision_sprites = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, True)
+    #             if collision_sprites:
+    #                 for target in collision_sprites:
+    #                     target.kill()
                 
     def run(self):
         self.visible_sprites.center_camera_draw(self.player)
         self.visible_sprites.update()
+        #self.player_attack_logic()
+        self.attackable_sprites.update()
         self.player_ui.display_health_bar(self.player, self.player.health, 100)
 
 class Player_Camera(pygame.sprite.Group):
