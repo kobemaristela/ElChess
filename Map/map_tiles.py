@@ -20,8 +20,12 @@ class Wall(pygame.sprite.Sprite):
         elif type == 'fountain':
             self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_fountain.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
-
-class Trigger_Door(pygame.sprite.Sprite):
+        
+        #fixes issue with player being unable to reach left walls
+        if type == "left":
+            self.rect.width //= 3
+        
+class Door(pygame.sprite.Sprite):
     def __init__(self, position, groups):
         super().__init__(groups)
         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door/door.png').convert_alpha()
@@ -81,6 +85,7 @@ class Map:
 
         self.visible_sprites = Player_Camera()
         self.obstacle_sprites = pygame.sprite.Group()
+        self.monster_collideables = pygame.sprite.Group() #group includes Monsters, Walls, and Hero
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
         self.make_map()
@@ -94,23 +99,23 @@ class Map:
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
                 if col == 'w':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'mid')
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'mid')
                 elif col == 'l':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'left')  
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'left')  
                 elif col == 'r':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'right')
                 elif col == 'g':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'goo')
                 elif col == 'f':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'fountain')
                 elif col == 'd':
-                    Trigger_Door((x, y), [self.visible_sprites, self.obstacle_sprites])           
+                    Door((x, y), [self.visible_sprites, self.obstacle_sprites])           
                 elif col == 'p':
-                    self.player = Hero((x, y), [self.visible_sprites],'bob', self.obstacle_sprites)
+                    self.player = Hero((x, y), [self.visible_sprites, self.monster_collideables],'bob', self.obstacle_sprites)
                 elif col == 'B':
-                    Boss((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites])
+                    Boss((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites, self.monster_collideables])
                 elif col == 'M':
-                    Monster((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites])
+                    Monster((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites, self.monster_collideables], self.monster_collideables)
 
     # def player_attack_logic(self):
     #     if self.attack_sprites:

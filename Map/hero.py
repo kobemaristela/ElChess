@@ -16,6 +16,9 @@ from pygame.locals import (
 from monster import Monster
 #from map_tiles import Trigger_Door
 
+#added to fix collision issue (overlap)
+PADDING_CONST = 20
+
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3, health=100):
         super().__init__(groups)
@@ -51,6 +54,7 @@ class Hero(pygame.sprite.Sprite):
             pass
 
     def keyboard_input(self):
+
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_UP]:
             self.direction.y = -1
@@ -87,12 +91,6 @@ class Hero(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = player_path / animation
             self.animations[animation] = import_folder(full_path)
-
-        #self.door_animations = {'trigger_door': []}
-        #door_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door/'
-        #for door_frame_animation in self.door_animations.keys():
-        #    full_path = door_path / door_frame_animation
-        #    self.door_animations[door_frame_animation] = import_folder(full_path)
         print(self.animations)
     
     def get_status(self):
@@ -135,23 +133,17 @@ class Hero(pygame.sprite.Sprite):
             if type(sprite) == Monster and self.attacking:
                 #print('attacking monster')
                 Monster.get_health(sprite)
+                print(sprite.health)
             elif type(sprite) == Monster:
-                #print("monster collision\n")
-                self.health -= 0.5
-
-            # if type(sprite) == Trigger_Door:
-            #     print('door triggered')
-            #     if sprite.door_status == 'closed':
-            #         Trigger_Door.open_door(sprite)
-            #     else:
-            #         Trigger_Door.close_door(sprite)
+                print("monster collision\n")
+                print(self.attacking)
 
             if direction == "horizontal":
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left
                 if self.direction.x < 0:
                     self.rect.left = sprite.rect.right
-            if direction == "vertical":
+            elif direction == "vertical":
                 if self.direction.y > 0:
                     self.rect.bottom = sprite.rect.top
                 if self.direction.y < 0:
@@ -159,7 +151,11 @@ class Hero(pygame.sprite.Sprite):
         
     def update(self):
         self.keyboard_input()
-        #self.get_status()
+        self.get_status()
         self.animate()
         self.move(self.speed)
-        self.get_status()
+
+#not currently used, but might become useful to fix collisions in the future
+def custom_collide(hero_sprite: Hero, sprite: pygame.sprite.Sprite) -> bool:
+    collision_rect = pygame.rect.Rect(sprite.rect.left - PADDING_CONST, sprite.rect.top, sprite.rect.width + PADDING_CONST,sprite.rect.height)
+    return collision_rect.colliderect(hero_sprite.rect)
