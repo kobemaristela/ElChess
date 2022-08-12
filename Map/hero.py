@@ -53,6 +53,7 @@ class Hero(pygame.sprite.Sprite):
             pass
 
     def keyboard_input(self):
+
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_UP]:
             self.direction.y = -1
@@ -84,7 +85,7 @@ class Hero(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = player_path / animation
             self.animations[animation] = import_folder(full_path)
-        print(self.animations)
+        #print(self.animations)
     
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:
@@ -120,21 +121,20 @@ class Hero(pygame.sprite.Sprite):
 
 
     def collision(self, direction):
-        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, custom_collide)
+        collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
             #could potentially handle monster battles below
             if type(sprite) == Monster and self.attacking:
                 #print('attacking monster')
                 Monster.get_health(sprite)
+                print(sprite.health)
             elif type(sprite) == Monster:
-                #print("monster collision\n")
-                self.health -= 0.5
-                sprite.hp -= 0.1
-                if sprite.hp < 0:
-                    sprite.kill()
+                print("monster collision\n")
+                print(self.attacking)
+
             elif direction == "horizontal":
                 if self.direction.x > 0:
-                    self.rect.right = sprite.rect.left - PADDING_CONST
+                    self.rect.right = sprite.rect.left
                 if self.direction.x < 0:
                     self.rect.left = sprite.rect.right
             elif direction == "vertical":
@@ -146,11 +146,11 @@ class Hero(pygame.sprite.Sprite):
 
     def update(self):
         self.keyboard_input()
-        #self.get_status()
+        self.get_status()
         self.animate()
         self.move(self.speed)
 
-#fixes overlap collision
+#not currently used, but might become useful to fix collisions in the future
 def custom_collide(hero_sprite: Hero, sprite: pygame.sprite.Sprite) -> bool:
     collision_rect = pygame.rect.Rect(sprite.rect.left - PADDING_CONST, sprite.rect.top, sprite.rect.width + PADDING_CONST,sprite.rect.height)
     return collision_rect.colliderect(hero_sprite.rect)
