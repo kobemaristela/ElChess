@@ -10,20 +10,38 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_mid.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_mid.png').convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_left.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_left.png').convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_right.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_right.png').convert_alpha()
         elif type == 'goo':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_goo.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_goo.png').convert_alpha()
+        elif type == 'fountain':
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_fountain.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
-class Door(pygame.sprite.Sprite):
-   def __init__(self, position, groups):
+class Trigger_Door(pygame.sprite.Sprite):
+    def __init__(self, position, groups):
         super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door.png').convert_alpha()
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door/door.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
+
+        self.door_status = 'closed'
+
+    def open_door(self):
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door/doors_open.png').convert_alpha()
+        self.door_status = 'open'
+
+    def close_door(self):
+        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door/door.png').convert_alpha()
+        self.door_status = 'closed'     
+
+# class Door(pygame.sprite.Sprite):
+#    def __init__(self, position, groups):
+#         super().__init__(groups)
+#         self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door.png').convert_alpha()
+#         self.rect = self.image.get_rect(topleft = position)
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
@@ -83,8 +101,10 @@ class Map:
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'right')
                 elif col == 'g':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'goo')
+                elif col == 'f':
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'fountain')
                 elif col == 'd':
-                    Door((x, y), [self.visible_sprites, self.obstacle_sprites])           
+                    Trigger_Door((x, y), [self.visible_sprites, self.obstacle_sprites])           
                 elif col == 'p':
                     self.player = Hero((x, y), [self.visible_sprites],'bob', self.obstacle_sprites)
                 elif col == 'B':

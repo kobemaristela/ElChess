@@ -15,8 +15,8 @@ class Game:
         self.map = Map()
 
         #audio
-        self.music = pygame.mixer.Sound(pathlib.Path(__file__).parent.parent /  'Graphics-Audio/dungeon_music.wav')
-        self.music.set_volume(0.5)
+        self.music = pygame.mixer.Sound(pathlib.Path(__file__).parent.parent /  'Graphics-Audio/sound-effects/dungeon_music.wav')
+        self.music.set_volume(0.4)
         self.music.play(-1)
 
     def homescreen(self):
