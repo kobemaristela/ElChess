@@ -23,14 +23,16 @@ class Game:
         title_font = pygame.font.SysFont("inkfree", 70)
         font = pygame.font.SysFont("inkfree", 40)
         welcome_text = title_font.render('Welcome to ELCHESS', True, WHITE)
-        click_caption = font.render('-Click anywhere to start game-', True, RED) #cyan
-        backspace_caption = font.render('-Backspace to QUIT game-', True, GRAY) #magenta
+        click_caption = font.render('-Click anywhere to start game-', True, RED)
+        backspace_caption = font.render('-Backspace to QUIT game-', True, GRAY)
+        attack_caption = font.render('-SPACE BAR to attack monsters-', True, WHITE)
 
         play = True
         while play:
             self.screen.blit(welcome_text, (110, 80))
             self.screen.blit(click_caption, (150, 300))
             self.screen.blit(backspace_caption, (180, 350))
+            self.screen.blit(attack_caption, (130, 420))
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -49,7 +51,6 @@ class Game:
         flee_button_img = pygame.image.load(pathlib.Path(__file__).parent.parent  / 'Graphics-Audio/flee_button.png').convert_alpha()
         player_attack_button = Button(50, 450, attack_button_img, 0.65)
         player_flee_button = Button(450, 450, flee_button_img, 0.65)
-
 
         running = True
         while running:
@@ -86,11 +87,13 @@ class Game:
         font = pygame.font.SysFont("inkfree", 40)
         game_over_text = title_font.render('GAME OVER', True, RED)
         backspace_caption = font.render('-Backspace to EXIT game-', True, GRAY) #magenta
+        #play_again_caption = font.render('-Press Tab to play again-', True, WHITE)
 
         play = True
         while play:
             self.screen.fill(BLACK)
             self.screen.blit(game_over_text, (115, 100))
+            #self.screen.blit(play_again_caption, (180, 300))
             self.screen.blit(backspace_caption, (180, 350))
             pygame.display.flip()
 
@@ -99,6 +102,9 @@ class Game:
                     if event.key == K_BACKSPACE:
                         play = False
                         sys.exit()
+                    #if event.key == K_TAB:
+                    #    play = False
+                    #    self.run()
 
 if __name__ == "__main__":
     game = Game()
