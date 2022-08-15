@@ -1,13 +1,16 @@
 import pygame
+import time
 from pathlib import Path
 from constants import *
-import time
+from puzzles.fenparser import FenParser
+
 
 class ChessBoard:
-    def __init__(self):
+    def __init__(self, puzzle=None):
         # Initialize variables
         self.screen_width = 750
         self.screen_height = 750
+        self.fen, self.solution = self.load_puzzle(puzzle)
 
 
         # Initialize game
@@ -32,7 +35,14 @@ class ChessBoard:
 
         # Chess Pieces
         self.chess_pieces = self.load_chess_pieces()
-        
+    
+
+    def load_puzzle(self, puzzle):
+        temp_puzzle = puzzle.split(',')
+        fen = FenParser(temp_puzzle[0])
+
+        return fen, temp_puzzle[1]
+
 
     def get_board_coordinates(self):
         board_coordinates = []
@@ -57,10 +67,8 @@ class ChessBoard:
 
 
     def setup_board(self):
-        self.window.blit(self.board, (0,0)) # Display Base Board
+        self.window.blit(self.board, (0,0))
         pygame.display.flip()   # Update window
-
-
         self.window.blit(self.chess_pieces['black']['king'], self.board_coordinates[0][7])
         pygame.display.flip()   # Update window
         self.window.blit(self.chess_pieces['black']['king'], self.board_coordinates[0][6])
@@ -69,6 +77,7 @@ class ChessBoard:
 
     def main(self):
         self.setup_board()
+        print(self.solution)
 
         while self.running:
             for event in pygame.event.get():

@@ -122,7 +122,7 @@ class PuzzleDatabase():
 
 
     def _process_search_string(self, fen):
-        fen_str = fen.split(',')[1]
+        fen_str = fen.split(',')[0]
         fen_parser = FenParser(fen_str)
 
         if not self.search:
@@ -153,16 +153,18 @@ class PuzzleDatabase():
         @TODO: create check for csv file
         """
         print("Reading Database...")
-
+        print(self.database)
         if not self.database.with_suffix('.parquet').is_file():
             if Path(self.database).suffix != '.parquet':
                 convert = ParquetConverter(self.database,
                                             self.database.with_suffix('.parquet'))
 
                 convert.csv_to_parquet_pyarrow()
+                print(f"Conversion complete...")
+
         self.database = self.database.with_suffix('.parquet')
         
-        print(f"Conversion complete... Parsing Parquet file")
+        print(f"Parsing Parquet file...")
 
         if read:
             self.__pyarrow_read_parquet()

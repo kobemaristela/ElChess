@@ -1,8 +1,11 @@
-import configparser
+from configparser import RawConfigParser
+from collections import defaultdict
+from random import choice
 from pathlib import Path
+
 from constants import *
-import collections
 from puzzles.puzzledatabase import PuzzleDatabase
+from chessboard import ChessBoard
 
 
 class ChessGame():
@@ -16,10 +19,10 @@ class ChessGame():
 
 
     def load_settings(self):
-        parser = configparser.RawConfigParser()
+        parser = RawConfigParser()
         parser.read(GAMEOPTIONS)
 
-        section_dict = collections.defaultdict()
+        section_dict = defaultdict()
         for section in parser.sections():
             section_dict[section] = dict(parser.items(section))
     
@@ -49,14 +52,30 @@ class ChessGame():
             return PuzzleDatabase(database=database)
 
         if self.settings['Game']['difficulty'] in db.keys():
-            return PuzzleDatabase(db[self.settings['Game']['difficulty']])
+            print(db[self.settings['Game']['difficulty']])
+            return PuzzleDatabase(database=db[self.settings['Game']['difficulty']])
         
-        return PuzzleDatabase()
+        return PuzzleDatabase(database=NORMAL_DATABASE)
 
     def main(self):
-        chess = Chessboard()
+        if not hasattr(self, "game_type"):
+            raise ValueError(f"Game type set to {self.game_type}")
+
+        if self.game_type == "puzzle":
+            self.database.main(read=True)
+            puzzle = choice(self.database.read_results())
+
+            chess = ChessBoard(puzzle)
+            chess.main()
+
+
+        if self.game_type == "normal":
+            chess = ChessBoard()
+            chess.main()
+
 
 
 if __name__ == "__main__":
     chess_game = ChessGame()
-    chess_game.database.main(read=True)
+    chess_game.set_game_type("puzzle")
+    chess_game.main()
