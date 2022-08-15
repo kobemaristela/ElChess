@@ -5,10 +5,6 @@ import pyarrow.parquet as pq
 import pyarrow.csv as pv
 
 
-CSV_NAME = r'lichess_db_puzzle'
-PARQUET_NAME = r'lichess_db_puzzle2'
-
-
 class ParquetConverter():
     def __init__(self, csv, parquet, chunksize=100_000):
         self.csv = csv

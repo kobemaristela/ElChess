@@ -26,6 +26,9 @@ EASY_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/easy_db.csv')
 NORMAL_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/normal_db.csv')
 HARD_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/hard_db.csv')
 
+## Chess Board
+BOARD = CURRENTDIRECTORY.joinpath(r'assets/board.png')
+
 ## White Pieces
 WHITEKING = CURRENTDIRECTORY.joinpath(r'assets/chess-king-white.png')
 WHITEQUEEN = CURRENTDIRECTORY.joinpath(r'assets/chess-queen-white.png')

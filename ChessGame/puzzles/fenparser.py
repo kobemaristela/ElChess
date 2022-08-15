@@ -15,10 +15,12 @@ class FenParser():
 
         self.__read_fen()
 
+
     def __read_fen(self):
         (self.pieces, self.active, self.castling, self.en_passant,
             self.halfmove_clock, self.fullmove_number) = self.fen.split(' ')
         self.__validate_fen_field()
+
 
     def __validate_fen_field(self):
         re_pieces = re.compile('^[KkQqBbNnRrPp1-8/]+$')
@@ -39,8 +41,10 @@ class FenParser():
         if not re_digits.match(self.fullmove_number):
             raise ValueError(f'Invalid fullmove number: {self.fullmove_number}')          
 
+
     def __flatten(self, lst):
         return list(chain(*lst))
+
 
     def __expand(self, pieces):
         reg_exp = re.compile("(^[KkQqBbNnRrPp]$)")
@@ -51,8 +55,10 @@ class FenParser():
             res = self.__padding(pieces)    # pads spaces
         return res
 
+
     def __padding(self, num):
         return int(num) * " "
+
 
     def __parse_rank(self, rank):
         reg_exp = re.compile("(\d|[KkQqBbNnRrPp])")
@@ -60,14 +66,17 @@ class FenParser():
         pieces = self.__flatten(map(self.__expand, matches))
         return pieces
 
+
     def parse(self):
         ranks = self.pieces.split("/")
         return [self.__parse_rank(rank) for rank in ranks]
+
 
     def search_piece(self, piece):
         re_pieces = re.compile(f"^[{piece}1-8/]+$")
         res = re_pieces.match(self.pieces)
         return True if res else False
+
 
 if __name__ == "__main__":
     FEN = "4p3/5pk1/1p3pP1/3p3p/2pP4/P4P1P/1P3PP1/7K w - - 6 34"

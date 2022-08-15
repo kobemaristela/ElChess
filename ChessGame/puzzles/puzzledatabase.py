@@ -115,7 +115,7 @@ class PuzzleDatabase():
 
         for chunk in table:
             for line in chunk:
-                pool.apply_async(self._process_search_string(fen), [line.as_py()], callback=self._record_read_results)
+                pool.apply_async(self._process_search_string, [line.as_py()], callback=self._record_read_results)
 
         pool.close()
         pool.join()
@@ -124,6 +124,10 @@ class PuzzleDatabase():
     def _process_search_string(self, fen):
         fen_str = fen.split(',')[1]
         fen_parser = FenParser(fen_str)
+
+        if not self.search:
+            return fen
+
         if fen_parser.search_piece(self.search):
             return fen
 
@@ -144,17 +148,18 @@ class PuzzleDatabase():
 
 
 
-    def main(self, read, write):
+    def main(self, read=False, write=False):
         """
         @TODO: create check for csv file
         """
+        print("Reading Database...")
+
         if not self.database.with_suffix('.parquet').is_file():
             if Path(self.database).suffix != '.parquet':
                 convert = ParquetConverter(self.database,
                                             self.database.with_suffix('.parquet'))
 
                 convert.csv_to_parquet_pyarrow()
-
         self.database = self.database.with_suffix('.parquet')
         
         print(f"Conversion complete... Parsing Parquet file")
@@ -163,4 +168,9 @@ class PuzzleDatabase():
             self.__pyarrow_read_parquet()
 
         if write:
-            self.__pyarrow_write_parquet()   
+            self.__pyarrow_write_parquet()
+
+
+if __name__ == "__main__":
+    db = PuzzleDatabase(database=EASY_DATABASE)
+    db.main(read=True)

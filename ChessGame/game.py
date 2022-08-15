@@ -1,4 +1,3 @@
-import pygame
 import configparser
 from pathlib import Path
 from constants import *
@@ -8,18 +7,12 @@ from puzzles.puzzledatabase import PuzzleDatabase
 
 class ChessGame():
     def __init__(self, database=None):
-        # Initialize game
-        pygame.display.init()
-        pygame.font.init()
-
-
         # Initialize game settings
         self.settings = self.load_settings()
         self.set_difficulty(self.settings['Game']['difficulty'])
 
         # Initialize database
         self.database = self.load_database(database)
-
 
 
     def load_settings(self):
@@ -52,13 +45,18 @@ class ChessGame():
     
     def load_database(self, database):
         db = {'easy': EASY_DATABASE, 'normal': NORMAL_DATABASE, 'hard': HARD_DATABASE}
-        if database:
+        if database and Path.exists(database):
             return PuzzleDatabase(database=database)
 
         if self.settings['Game']['difficulty'] in db.keys():
-
             return PuzzleDatabase(db[self.settings['Game']['difficulty']])
         
         return PuzzleDatabase()
 
-ChessGame()
+    def main(self):
+        chess = Chessboard()
+
+
+if __name__ == "__main__":
+    chess_game = ChessGame()
+    chess_game.database.main(read=True)
