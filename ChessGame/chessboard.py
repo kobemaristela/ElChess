@@ -1,6 +1,4 @@
 import pygame
-import time
-from pathlib import Path
 from constants import *
 from puzzles.fenparser import FenParser
 
@@ -10,8 +8,9 @@ class ChessBoard:
         # Initialize variables
         self.screen_width = 750
         self.screen_height = 750
-        self.fen, self.solution = self.load_puzzle(puzzle)
 
+        # Initialze puzzle
+        self.puzzle, self.solution = self.load_puzzle(puzzle)
 
         # Initialize game
         pygame.display.init()
@@ -38,10 +37,13 @@ class ChessBoard:
     
 
     def load_puzzle(self, puzzle):
-        temp_puzzle = puzzle.split(',')
-        fen = FenParser(temp_puzzle[0])
+        if not puzzle:
+            return None, None
 
-        return fen, temp_puzzle[1]
+        temp_puzzle = puzzle.split(',')
+        puzzle = FenParser(temp_puzzle[0], game=True)
+
+        return puzzle, temp_puzzle[1].split(" ")
 
 
     def get_board_coordinates(self):
@@ -56,8 +58,8 @@ class ChessBoard:
 
 
     def load_chess_pieces(self):
-        chess_pieces = {"white": {'king': WHITEKING, 'queen':WHITEQUEEN, 'bishop':WHITEBISHOP, 'knight':WHITEKNIGHT, 'rook':WHITEROOK},
-                        'black': {'king': BLACKKING, 'queen':BLACKQUEEN, 'bishop':BLACKBISHOP, 'knight':BLACKKNIGHT, 'rook':BLACKROOK}}
+        chess_pieces = {"w": {'K': WHITEKING, 'Q':WHITEQUEEN, 'B':WHITEBISHOP, 'N':WHITEKNIGHT, 'R':WHITEROOK, 'P':WHITEPAWN},
+                        "b": {'k': BLACKKING, 'q':BLACKQUEEN, 'b':BLACKBISHOP, 'n':BLACKKNIGHT, 'r':BLACKROOK, 'p':BLACKPAWN}}
 
         for side in chess_pieces.keys():
             for piece in chess_pieces[side].keys():
@@ -69,20 +71,73 @@ class ChessBoard:
     def setup_board(self):
         self.window.blit(self.board, (0,0))
         pygame.display.flip()   # Update window
-        self.window.blit(self.chess_pieces['black']['king'], self.board_coordinates[0][7])
-        pygame.display.flip()   # Update window
-        self.window.blit(self.chess_pieces['black']['king'], self.board_coordinates[0][6])
-        pygame.display.flip()   # Update window
+
+
+        for ind_r, row in enumerate(self.puzzle.parse()):
+            for ind_c, piece in enumerate(row):
+                    if piece == " ":
+                        continue
+
+                    color = 'w' if piece.isupper() else 'b'
+                    self.window.blit(self.chess_pieces[color][piece], self.board_coordinates[ind_c][ind_r])
+                
+                    pygame.display.flip()   # Update window
+
 
 
     def main(self):
+        # Initualize board
         self.setup_board()
+
+        
+        # Setup Trackers
+        selected_pieces = []
         print(self.solution)
+        print(self.puzzle.get_board())
 
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    loc = pygame.mouse.get_pos()
+
+                    # Get board coordinates
+                    col, row = (loc[0] // self.square_size), (loc[1] // self.square_size)
+                    board_piece = self.puzzle.get_board_piece(row,col)
+
+
+                    # Logic check - Moving Active Color Piece
+                    if not selected_pieces and (board_piece == " " or \
+                        (self.puzzle.active == 'w' and not board_piece.isupper()) or \
+                        (self.puzzle.active == 'b' and not board_piece.islower())):
+
+                        continue
+
+                    
+                    # Clear if same piece was last selected
+                    selected_pieces.clear() if len(selected_pieces) > 1 or (row,col) in selected_pieces else selected_pieces.append((row,col))
+                    
+                    if len(selected_pieces) == 2:
+                        board_move = f"{BOARDUCI[selected_pieces[0][0]][selected_pieces[0][1]]}{BOARDUCI[selected_pieces[1][0]][selected_pieces[1][1]]}"
+                        move = FenParser.convert_uci_move(board_move)
+                        print(self.puzzle.get_legal_moves())
+                        print(self.solution[0])
+                        print(move)
+
+                        if move not in self.puzzle.get_legal_moves() or board_move != self.solution[0]:
+                            print("Incorrect Move... Try Again")
+                            selected_pieces.clear()
+                            continue
+                        
+
+                        
+                        print("Correct Move")
+                        
+
+                        
+
 
 
             self.clock.tick(20)

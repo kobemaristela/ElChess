@@ -52,7 +52,6 @@ class ChessGame():
             return PuzzleDatabase(database=database)
 
         if self.settings['Game']['difficulty'] in db.keys():
-            print(db[self.settings['Game']['difficulty']])
             return PuzzleDatabase(database=db[self.settings['Game']['difficulty']])
         
         return PuzzleDatabase(database=NORMAL_DATABASE)

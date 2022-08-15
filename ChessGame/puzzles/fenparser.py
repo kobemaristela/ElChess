@@ -1,10 +1,12 @@
 from itertools import chain
 import re
+import chess
 
 
 class FenParser():
-    def __init__(self, fen):
+    def __init__(self, fen, game=False):
         self.fen = fen
+        self.game = game
 
         self.pieces = None              # Describes piece placement on board; starts with rank 8 to 1
         self.active = None              # 'w' - white move | 'b' - black move
@@ -20,6 +22,9 @@ class FenParser():
         (self.pieces, self.active, self.castling, self.en_passant,
             self.halfmove_clock, self.fullmove_number) = self.fen.split(' ')
         self.__validate_fen_field()
+
+        if self.game:
+            self.game = chess.Board(self.fen)
 
 
     def __validate_fen_field(self):
@@ -72,10 +77,26 @@ class FenParser():
         return [self.__parse_rank(rank) for rank in ranks]
 
 
+    def get_board_piece(self,row,col):
+        return self.parse()[row][col]
+
+
     def search_piece(self, piece):
         re_pieces = re.compile(f"^[{piece}1-8/]+$")
         res = re_pieces.match(self.pieces)
         return True if res else False
+
+    def get_legal_moves(self):
+        return self.game.legal_moves
+
+
+    def get_board(self):
+        return self.game
+
+    
+    @staticmethod
+    def convert_uci_move(board_move):
+        return chess.Move.from_uci(board_move)
 
 
 if __name__ == "__main__":
