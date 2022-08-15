@@ -7,6 +7,11 @@ from .fenparser import FenParser
 from .parquetconverter import ParquetConverter
 from constants import *
 
+
+"""
+Statistics on Pyarrow with Parquet
+https://github.com/tirthajyoti/Machine-Learning-with-Python/blob/master/Pandas%20and%20Numpy/Read_data_various_sources/Pandas%20CSV%20vs.%20PyArrow%20parquet%20reading%20speed.ipynb
+"""
 class PuzzleDatabase():
     def __init__(self, search=None, database=DATABASE_CSV, workers=mp.cpu_count()):
         self.database = database
@@ -19,9 +24,10 @@ class PuzzleDatabase():
         self.puzzles = {'KkpP': 0, 'KkPpNn': 0, 'KkPpNnBb': 0, 'KkPpNnBbRr': 0, 'KkPpNnBbRrQq': 0}
 
 
+
     """
-    Statistics on Pyarrow with Parquet
-    https://github.com/tirthajyoti/Machine-Learning-with-Python/blob/master/Pandas%20and%20Numpy/Read_data_various_sources/Pandas%20CSV%20vs.%20PyArrow%20parquet%20reading%20speed.ipynb
+    WRITE DATABASE FOR PUZZLE
+
     """
     def __pyarrow_write_parquet(self):
         table = arrowParquet.read_table(self.database)
@@ -34,34 +40,10 @@ class PuzzleDatabase():
                 print(len(self.easy), len(self.normal), len(self.hard))
                 if len(self.easy) > 1000 and len(self.normal) > 1000 and len(self.hard) > 1000:
                     break
-                pool.apply_async(self._process_write_puzzle, [line.as_py()], callback=self._record_results)
+                pool.apply_async(self._process_write_puzzle, [line.as_py()], callback=self._record_write_results)
 
         pool.close()
         pool.join()
-
-
-    def __pyarrow_read_parquet(self):
-        table = arrowParquet.read_table(self.database)
-        pool = mp.Pool(self.workers)
-
-        for chunk in table:
-            if len(self.easy) > 1000 and len(self.normal) > 1000 and len(self.hard) > 1000:
-                break
-            for line in chunk:
-                print(len(self.easy), len(self.normal), len(self.hard))
-                if len(self.easy) > 1000 and len(self.normal) > 1000 and len(self.hard) > 1000:
-                    break
-                pool.apply_async(self._process_write_puzzle, [line.as_py()], callback=self._record_results)
-
-        pool.close()
-        pool.join()
-
-
-    def _process_find_string(self, fen):
-        fen_str = fen.split(',')[1]
-        fen_parser = FenParser(fen_str)
-        if fen_parser.search_piece(self.search):
-            self.results.append(fen)
 
 
     def _process_write_puzzle(self, puzzles):
@@ -81,7 +63,7 @@ class PuzzleDatabase():
         return None
         
 
-    def _record_results(self, puzzle):
+    def _record_write_results(self, puzzle):
         if puzzle:
             rating = int(puzzle[2])
             print(f"Current Readings: {self.puzzles}")
@@ -98,15 +80,6 @@ class PuzzleDatabase():
                 # print(rating, puzzle)
                 self.hard.append(puzzle)
         return None
-
-
-    def read_results(self, clear_results=False):
-        if clear_results:
-            temp = self.results
-            self.results.clear()
-            return temp
-            
-        return self.results
 
 
     def write_results(self):
@@ -129,6 +102,46 @@ class PuzzleDatabase():
             with open(HARD_DATABASE, 'w') as f:
                 writer = csv.writer(f)
                 writer.writerows(self.hard)
+
+
+
+    """
+    READ DATABASE FOR PUZZLE
+
+    """
+    def __pyarrow_read_parquet(self):
+        table = arrowParquet.read_table(self.database)
+        pool = mp.Pool(self.workers)
+
+        for chunk in table:
+            for line in chunk:
+                pool.apply_async(self._process_search_string(fen), [line.as_py()], callback=self._record_read_results)
+
+        pool.close()
+        pool.join()
+
+
+    def _process_search_string(self, fen):
+        fen_str = fen.split(',')[1]
+        fen_parser = FenParser(fen_str)
+        if fen_parser.search_piece(self.search):
+            return fen
+
+
+    def _record_read_results(self, puzzle):
+        if puzzle:
+            self.results.append(puzzle)
+
+
+    def read_results(self, clear_results=False):
+        if clear_results:
+            temp = self.results
+            self.results.clear()
+            return temp
+            
+        return self.results
+
+
 
 
     def main(self, read, write):
