@@ -18,9 +18,10 @@ class ParquetConverter():
 
     def csv_to_parquet_pandas(self):
         if Path(self.parquet).exists():
-            return False
+            raise ValueError("Parquet file already exists...")
 
         print(f"Converting CSV {self.csv} to PARQUET {self.parquet} using Pandas")
+
         csv_stream = pd.read_csv(
             self.csv, sep="\t", chunksize=self.chunksize, low_memory=False)
 
@@ -39,17 +40,14 @@ class ParquetConverter():
 
         writer.close()
 
-        return True
 
 
     def csv_to_parquet_pyarrow(self) -> bool:
         if Path(self.parquet).exists():
-            return False
+            raise ValueError("Parquet file already exists...")
 
         print(f"Converting CSV {self.csv} to PARQUET {self.parquet} using PyArrow")
 
         parse_options = pv.ParseOptions(delimiter="\t")
         csv_stream = pv.read_csv(self.csv, parse_options=parse_options)
         pq.write_table(csv_stream, self.parquet)
-
-        return True
