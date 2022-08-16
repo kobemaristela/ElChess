@@ -14,7 +14,7 @@ from pygame.locals import (
     QUIT
 )
 from monster import Monster
-#from map_tiles import Trigger_Door
+from door import Door
 
 #added to fix collision issue (overlap)
 PADDING_CONST = 20
@@ -47,11 +47,6 @@ class Hero(pygame.sprite.Sprite):
 
     def __repr__(self):
         return f'Hero(name={self.name}, level={self.level}, hp={self.hp})'
-    
-    def attack(self, other):
-        #attack_damage = random.choice(range(self.level + 2, self.level + 5))
-        if self.attacking:
-            pass
 
     def keyboard_input(self):
 
@@ -125,7 +120,6 @@ class Hero(pygame.sprite.Sprite):
         self.rect.y += self.direction.y * speed
         self.collision("vertical")
 
-
     def collision(self, direction):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
@@ -137,6 +131,9 @@ class Hero(pygame.sprite.Sprite):
             elif type(sprite) == Monster:
                 print("monster collision\n")
                 print(self.attacking)
+            elif type(sprite) == Door:
+                print('hero collided w/ door')
+                Door.move_door(sprite)
 
             if direction == "horizontal":
                 if self.direction.x > 0:

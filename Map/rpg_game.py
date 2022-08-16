@@ -87,13 +87,13 @@ class Game:
         font = pygame.font.SysFont("inkfree", 40)
         game_over_text = title_font.render('GAME OVER', True, RED)
         backspace_caption = font.render('-Backspace to EXIT game-', True, GRAY) #magenta
-        #play_again_caption = font.render('-Press Tab to play again-', True, WHITE)
+        #play_again_caption = font.render('-Click anywhwere to play again-', True, WHITE)
 
         play = True
         while play:
             self.screen.fill(BLACK)
             self.screen.blit(game_over_text, (115, 100))
-            #self.screen.blit(play_again_caption, (180, 300))
+            #self.screen.blit(play_again_caption, (160, 300))
             self.screen.blit(backspace_caption, (180, 350))
             pygame.display.flip()
 
@@ -102,9 +102,10 @@ class Game:
                     if event.key == K_BACKSPACE:
                         play = False
                         sys.exit()
-                    #if event.key == K_TAB:
-                    #    play = False
-                    #    self.run()
+                elif event.type == MOUSEBUTTONDOWN:
+                    play = False
+                    self.run()
+                    print('gameover loop')
 
 if __name__ == "__main__":
     game = Game()
