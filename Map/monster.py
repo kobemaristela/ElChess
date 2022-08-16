@@ -64,7 +64,7 @@ class Monster(pygame.sprite.Sprite):
         other.health -= attack_damage
 
     def get_health(self):
-        self.health -= 5
+        self.health -= 50
         # need a bar or something to show monster health or something
         self.check_death()
         

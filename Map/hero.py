@@ -14,6 +14,7 @@ from pygame.locals import (
     QUIT
 )
 from monster import Monster
+from door import Door
 
 #added to fix collision issue (overlap)
 PADDING_CONST = 20
@@ -46,11 +47,6 @@ class Hero(pygame.sprite.Sprite):
 
     def __repr__(self):
         return f'Hero(name={self.name}, level={self.level}, hp={self.hp})'
-    
-    def attack(self, other):
-        #attack_damage = random.choice(range(self.level + 2, self.level + 5))
-        if self.attacking:
-            pass
 
     def keyboard_input(self):
 
@@ -76,6 +72,11 @@ class Hero(pygame.sprite.Sprite):
         # attack input
         if key_pressed[pygame.K_SPACE] and not self.attacking:
             self.attacking = True
+
+            #attack audio
+            # self.attack_sound = pygame.mixer.Sound(pathlib.Path(__file__).parent.parent /  'Graphics-Audio/sound-effects/attack_sound.wav')
+            # self.attack_sound.set_volume(0.6)
+            # self.attack_sound.play()
     
     def import_player_assets(self):
         player_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/player/'
@@ -85,7 +86,7 @@ class Hero(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = player_path / animation
             self.animations[animation] = import_folder(full_path)
-        #print(self.animations)
+        print(self.animations)
     
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:
@@ -119,7 +120,6 @@ class Hero(pygame.sprite.Sprite):
         self.rect.y += self.direction.y * speed
         self.collision("vertical")
 
-
     def collision(self, direction):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
@@ -131,8 +131,11 @@ class Hero(pygame.sprite.Sprite):
             elif type(sprite) == Monster:
                 print("monster collision\n")
                 print(self.attacking)
+            elif type(sprite) == Door:
+                print('hero collided w/ door')
+                Door.move_door(sprite)
 
-            elif direction == "horizontal":
+            if direction == "horizontal":
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left
                 if self.direction.x < 0:
@@ -143,7 +146,6 @@ class Hero(pygame.sprite.Sprite):
                 if self.direction.y < 0:
                     self.rect.top = sprite.rect.bottom
         
-
     def update(self):
         self.keyboard_input()
         self.get_status()

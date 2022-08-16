@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 import pathlib
 from map_constants import *
+from door import Door
 from hero import Hero
 from monster import Monster
 from player_ui import Player_UI
@@ -10,24 +11,20 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_mid.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_mid.png').convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_left.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_left.png').convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_right.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_right.png').convert_alpha()
         elif type == 'goo':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/wall_goo.png').convert_alpha()
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_goo.png').convert_alpha()
+        elif type == 'fountain':
+            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_fountain.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
         
         #fixes issue with player being unable to reach left walls
         if type == "left":
-            self.rect.width //= 3
-        
-class Door(pygame.sprite.Sprite):
-   def __init__(self, position, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/door.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
+            self.rect.width //= 3  
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, position, groups):
@@ -87,9 +84,11 @@ class Map:
                 elif col == 'r':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'right')
                 elif col == 'g':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'goo')
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'goo')
+                elif col == 'f':
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'fountain')
                 elif col == 'd':
-                    Door((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables])           
+                    self.door = Door((x, y), [self.visible_sprites, self.obstacle_sprites], 'closed')           
                 elif col == 'p':
                     self.player = Hero((x, y), [self.visible_sprites, self.monster_collideables],'bob', self.obstacle_sprites)
                 elif col == 'B':
@@ -108,7 +107,6 @@ class Map:
     def run(self):
         self.visible_sprites.center_camera_draw(self.player)
         self.visible_sprites.update()
-        #self.player_attack_logic()
         self.attackable_sprites.update()
         self.player_ui.display_health_bar(self.player, self.player.health, 100)
 
