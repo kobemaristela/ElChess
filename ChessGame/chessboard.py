@@ -70,6 +70,15 @@ class ChessBoard:
         return chess_pieces
 
 
+    def make_chess_move(self, player_move):
+        self.solution.pop(0)
+        self.puzzle.set_chess_move(player_move)
+        
+        enemy_move = FenParser.convert_uci_move(self.solution[0])
+        self.puzzle.set_chess_move(enemy_move)
+        self.solution.pop(0)
+
+
     def setup_board(self):
         self.window.blit(self.board, (0,0))
         pygame.display.flip()   # Update window
@@ -93,11 +102,13 @@ class ChessBoard:
         
         # Setup Trackers
         selected_pieces = []
-        print(self.solution)
-        print(self.puzzle.get_board())
 
         while self.running:
             for event in pygame.event.get():
+                if not self.solution:
+                    self.running = False
+                    print("Boss Defeated")
+                    
                 if event.type == pygame.QUIT:
                     self.running = False
                 
@@ -122,12 +133,11 @@ class ChessBoard:
                     
                     if len(selected_pieces) == 2:
                         board_move = f"{BOARDUCI[selected_pieces[0][0]][selected_pieces[0][1]]}{BOARDUCI[selected_pieces[1][0]][selected_pieces[1][1]]}"
-                        move = FenParser.convert_uci_move(board_move)
-                        print(self.puzzle.get_legal_moves())
-                        print(self.solution[0])
-                        print(move)
+                        player_move = FenParser.convert_uci_move(board_move)
+                        print(self.solution[0]) # Next available move
+                        print(player_move) #
 
-                        if move not in self.puzzle.get_legal_moves():
+                        if player_move not in self.puzzle.get_legal_moves():
                             print("Invalid Move... Try Again")
                             selected_pieces.clear()
                             continue
@@ -140,8 +150,7 @@ class ChessBoard:
                         
                         # Remove move in solution
                         print("Correct Move")
-                        self.solution.pop(0)
-                        self.puzzle.set_chess_move(move)
+                        self.make_chess_move(player_move)
                         self.setup_board()
                         
                         
