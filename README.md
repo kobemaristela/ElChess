@@ -37,7 +37,7 @@ ElChess requires [Python](https://www.python.org/downloads/) to run.
 
 ___Clone the repository___
 ```sh
-git clone https://gitlab.com/techwise-group-15/project-1.git
+git clone https://gitlab.com/techwise-group-15/ElChess.git
 ```
 
 ___Initiate the virtual environment___
