@@ -115,11 +115,3 @@ class FenParser():
     @staticmethod
     def convert_uci_move(board_move):
         return chess.Move.from_uci(board_move)
-
-
-if __name__ == "__main__":
-    FEN = "4p3/5pk1/1p3pP1/3p3p/2pP4/P4P1P/1P3PP1/7K w - - 6 34"
-    p = FenParser(FEN)
-    print(p.find_piece('Pp'))
-
-    [print(rank) for rank in p.parse()]
