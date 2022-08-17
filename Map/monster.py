@@ -92,6 +92,10 @@ class Monster(pygame.sprite.Sprite):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False)
         for sprite in collided_sprites:
             if type(sprite) == hero.Hero:
-                self.attack(sprite)
+                if "attack" not in sprite.status:
+                    self.attack(sprite)
+                else:
+                    self.get_health()
+                    print(self.health)
         if len(collided_sprites) > 1:
             return True

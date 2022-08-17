@@ -124,13 +124,11 @@ class Hero(pygame.sprite.Sprite):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False, pygame.sprite.collide_rect_ratio(1))
         for sprite in collided_sprites:
             #could potentially handle monster battles below
-            if type(sprite) == Monster and self.attacking:
-                #print('attacking monster')
-                Monster.get_health(sprite)
-                print(sprite.health)
+            if type(sprite) == Monster and "attack" in self.status:
+                print('attacking monster')
             elif type(sprite) == Monster:
                 print("monster collision\n")
-                print(self.attacking)
+                #false even when displaying attack animations
 
             elif direction == "horizontal":
                 if self.direction.x > 0:
@@ -149,7 +147,6 @@ class Hero(pygame.sprite.Sprite):
         self.get_status()
         self.animate()
         self.move(self.speed)
-
 #not currently used, but might become useful to fix collisions in the future
 def custom_collide(hero_sprite: Hero, sprite: pygame.sprite.Sprite) -> bool:
     collision_rect = pygame.rect.Rect(sprite.rect.left - PADDING_CONST, sprite.rect.top, sprite.rect.width + PADDING_CONST,sprite.rect.height)
