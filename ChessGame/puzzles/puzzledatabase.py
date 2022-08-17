@@ -5,7 +5,7 @@ import pyarrow.parquet as arrowParquet
 from pathlib import Path
 from .fenparser import FenParser
 from .parquetconverter import ParquetConverter
-from constants import *
+from ..constants import *
 
 
 """
@@ -13,7 +13,7 @@ Statistics on Pyarrow with Parquet
 https://github.com/tirthajyoti/Machine-Learning-with-Python/blob/master/Pandas%20and%20Numpy/Read_data_various_sources/Pandas%20CSV%20vs.%20PyArrow%20parquet%20reading%20speed.ipynb
 """
 class PuzzleDatabase():
-    def __init__(self, search=None, database=DATABASE_CSV, workers=mp.cpu_count()):
+    def __init__(self, search=None, database=NORMAL_DATABASE, workers=mp.cpu_count()):
         self.database = database
         self.workers = workers
         self.search = search

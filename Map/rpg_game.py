@@ -1,9 +1,11 @@
 import pygame, sys
 import pathlib
 from pygame.locals import *
-from map_constants import *
-from map_tiles import Map
-from map_tiles import Button
+
+from ChessGame.chessgame import ChessGame
+from .map_constants import *
+from .map_tiles import Map
+from .map_tiles import Button
 
 
 class Game:
@@ -53,6 +55,7 @@ class Game:
         player_flee_button = Button(450, 450, flee_button_img, 0.65)
 
         running = True
+        count = 0
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -81,6 +84,13 @@ class Game:
                 self.game_over()
             pygame.display.update()
             self.clock.tick(FPS)
+            
+            if self.map.player.boss == True and count == 0:
+                count += 1
+                running = False
+                chess_game = ChessGame()
+                chess_game.set_game_type("puzzle")
+                chess_game.main()
 
     def game_over(self):
         title_font = pygame.font.SysFont("inkfree", 115)

@@ -1,6 +1,6 @@
 import pygame
-from constants import *
-from puzzles.fenparser import FenParser
+from .constants import *
+from .puzzles.fenparser import FenParser
 
 
 class ChessBoard:

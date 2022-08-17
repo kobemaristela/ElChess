@@ -1,11 +1,12 @@
 import pygame, sys
 from pygame.locals import *
 import pathlib
-from map_constants import *
-from door import Door
-from hero import Hero
-from monster import Monster
-from player_ui import Player_UI
+from .map_constants import *
+from .door import Door
+from .hero import Hero
+from .monster import Monster
+from .player_ui import Player_UI
+from .boss import Boss
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
@@ -25,12 +26,6 @@ class Wall(pygame.sprite.Sprite):
         #fixes issue with player being unable to reach left walls
         if type == "left":
             self.rect.width //= 3  
-
-class Boss(pygame.sprite.Sprite):
-    def __init__(self, position, groups):
-        super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/boss_pic.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = position)
 
 class Button():
     def __init__(self, x, y, image, scale):

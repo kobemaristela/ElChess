@@ -3,9 +3,9 @@ from collections import defaultdict
 from random import choice
 from pathlib import Path
 
-from constants import *
-from puzzles.puzzledatabase import PuzzleDatabase
-from chessboard import ChessBoard
+from .constants import *
+from .puzzles.puzzledatabase import PuzzleDatabase
+from .chessboard import ChessBoard
 
 
 class ChessGame():
@@ -43,6 +43,8 @@ class ChessGame():
             raise ValueError(f"Invalid Game Type: {game_type}")
 
         self.game_type = game_type
+        
+        print(self.database)
     
 
     
@@ -71,10 +73,3 @@ class ChessGame():
         if self.game_type == "normal":
             chess = ChessBoard()
             chess.main()
-
-
-
-if __name__ == "__main__":
-    chess_game = ChessGame()
-    chess_game.set_game_type("puzzle")
-    chess_game.main()
