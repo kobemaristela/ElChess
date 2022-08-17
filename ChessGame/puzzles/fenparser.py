@@ -25,6 +25,7 @@ class FenParser():
 
         if self.game:
             self.game = chess.Board(self.fen)
+        
 
 
     def __validate_fen_field(self):
@@ -86,9 +87,20 @@ class FenParser():
         res = re_pieces.match(self.pieces)
         return True if res else False
 
+    def update_board(self, fen):
+        (self.pieces, self.active, self.castling, self.en_passant,
+            self.halfmove_clock, self.fullmove_number) = fen.split(' ')
+        
+        self.__validate_fen_field()
+        
+        
+    def set_chess_move(self, move):
+        self.game.push(move)
+        
+        self.update_board(self.game.fen())
+        
     def get_legal_moves(self):
         return self.game.legal_moves
-
 
     def get_board(self):
         return self.game

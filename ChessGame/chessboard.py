@@ -1,6 +1,8 @@
 import pygame
 from .constants import *
 from .puzzles.fenparser import FenParser
+from tkinter import *
+from tkinter import messagebox
 
 
 class ChessBoard:
@@ -88,7 +90,6 @@ class ChessBoard:
     def main(self):
         # Initualize board
         self.setup_board()
-
         
         # Setup Trackers
         selected_pieces = []
@@ -126,20 +127,24 @@ class ChessBoard:
                         print(self.solution[0])
                         print(move)
 
-                        if move not in self.puzzle.get_legal_moves() or board_move != self.solution[0]:
-                            print("Incorrect Move... Try Again")
+                        if move not in self.puzzle.get_legal_moves():
+                            print("Invalid Move... Try Again")
                             selected_pieces.clear()
                             continue
                         
-
+                        if board_move != self.solution[0]:
+                            print("Incorrect Move... Try Again")
+                            selected_pieces.clear()
+                            continue
+                            
                         
+                        # Remove move in solution
                         print("Correct Move")
+                        self.solution.pop(0)
+                        self.puzzle.set_chess_move(move)
+                        self.setup_board()
                         
-
                         
-
-
-
             self.clock.tick(20)
             pygame.display.flip()
 
