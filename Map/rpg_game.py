@@ -55,7 +55,6 @@ class Game:
         player_flee_button = Button(450, 450, flee_button_img, 0.65)
 
         running = True
-        count = 0
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,12 +84,11 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
             
-            if self.map.player.boss == True and count == 0:
-                count += 1
-                running = False
-                chess_game = ChessGame()
-                chess_game.set_game_type("puzzle")
-                chess_game.main()
+            # if self.map.player.boss:
+            #     running = False
+            #     chess_game = ChessGame()
+            #     chess_game.set_game_type("puzzle")
+            #     chess_game.main()
 
     def game_over(self):
         title_font = pygame.font.SysFont("inkfree", 115)

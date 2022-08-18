@@ -2,7 +2,7 @@ from Map.rpg_game import Game
 from ChessGame.chessgame import ChessGame
 
 # Test Driver
-MERGEATTEMPT = False
+MERGEATTEMPT = True
 
 if MERGEATTEMPT:
     game = Game()
