@@ -1,6 +1,7 @@
 import pygame
 from ..constants import *
 
+
 class PlayButton(pygame.sprite.Sprite):
     def __init__(self, text, x=0, y=0, width=100, height=50, command=None):
 

@@ -1,4 +1,5 @@
 import pygame
+import sys
 from .constants import *
 from .puzzles.fenparser import FenParser
 from .sprites.play_button import PlayButton
@@ -91,6 +92,7 @@ class ChessBoard:
                 
                     pygame.display.flip()   # Update window
     
+    
     def init_game_start(self):
         isPause = True
         color = "White's Move" if self.puzzle.active == 'w' else "Black's Move"
@@ -111,7 +113,6 @@ class ChessBoard:
             self.clock.tick(25)
         
 
-
     def main(self):
         # Initialize board
         self.setup_board()
@@ -120,14 +121,17 @@ class ChessBoard:
         selected_pieces = []
         isRunning = True    # Game Loop
 
+        print(f"Solution: {self.solution[0]}") # Next available move
         while isRunning:
             for event in pygame.event.get():
                 if not self.solution:
                     self.running = False
                     print("Boss Defeated")
+                    sys.exit()
                     
                 if event.type == pygame.QUIT:
                     self.running = False
+                    sys.exit()
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     loc = pygame.mouse.get_pos()
@@ -141,19 +145,19 @@ class ChessBoard:
                     if not selected_pieces and (board_piece == " " or \
                         (self.puzzle.active == 'w' and not board_piece.isupper()) or \
                         (self.puzzle.active == 'b' and not board_piece.islower())):
-
+                        selected_pieces.clear()
                         continue
 
                     
-                    # Clear if same piece was last selected
-                    # @TODO Fix piece selection logic
+                    # Piece selection logic
                     selected_pieces.clear() if len(selected_pieces) > 1 or (row,col) in selected_pieces else selected_pieces.append((row,col))
                     
+                    
+                    # Second piece selection
                     if len(selected_pieces) == 2:
                         board_move = f"{BOARDUCI[selected_pieces[0][0]][selected_pieces[0][1]]}{BOARDUCI[selected_pieces[1][0]][selected_pieces[1][1]]}"
                         player_move = FenParser.convert_uci_move(board_move)
-                        print(self.solution[0]) # Next available move
-                        print(player_move) #
+
 
                         if player_move not in self.puzzle.get_legal_moves():
                             print("Invalid Move... Try Again")
@@ -166,9 +170,9 @@ class ChessBoard:
                             continue
                             
                         
-                        # Remove move in solution
+                        # Correct Move Handle
                         print("Correct Move")
-                        self.make_chess_move(player_move)
+                        self.make_chess_move(player_move)   # Remove move in solution
                         self.setup_board()
                         
                         
