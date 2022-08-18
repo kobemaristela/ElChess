@@ -8,6 +8,7 @@ You must embark on a journey to cross all six realms. Each realm has a relic che
 
 [_Progress Overview_](https://docs.google.com/presentation/d/1_W84oneH_hCo1ZpfxYTXvR2kcTZxyzj29MZaU5xUayI/edit?usp=sharing) | [_Technical Design Document_](https://docs.google.com/document/d/1WySE5AJgGUELTtmZoP7sx3xJvzS245AY7lwgcv_Rrt0/edit?usp=sharin)
 
+[_Final Presentation_](https://docs.google.com/presentation/d/1lsZgmz72L6cZa9fiWMthpchZmsisM7wh4t5uLwRueKQ/edit?usp=sharing)
 --------
 ## Features
 * Chess Puzzle Simulator  - Solve chess puzzles to battle against randomly encountered enemies and bosses. Utilize the Stockfish chess engine to set AI difficulty and chess settings.
@@ -36,7 +37,7 @@ ElChess requires [Python](https://www.python.org/downloads/) to run.
 
 ___Clone the repository___
 ```sh
-git clone https://gitlab.com/techwise-group-15/project-1.git
+git clone https://gitlab.com/techwise-group-15/ElChess.git
 ```
 
 ___Initiate the virtual environment___
