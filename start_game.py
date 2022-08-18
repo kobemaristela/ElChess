@@ -3,7 +3,7 @@ from Map.rpg_game import Game
 from ChessGame.chessgame import ChessGame
 
 # Test Driver
-MERGEATTEMPT = False
+MERGEATTEMPT = True
 
 if __name__ == "__main__":
     freeze_support()    # Windows is stupid
