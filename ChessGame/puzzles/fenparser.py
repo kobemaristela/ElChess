@@ -71,6 +71,7 @@ class FenParser():
         pieces = self.__flatten(map(self.__expand, matches))
         return pieces
 
+
     def __update_board(self, fen):
         (self.pieces, self.active, self.castling, self.en_passant,
         self.halfmove_clock, self.fullmove_number) = fen.split(' ')

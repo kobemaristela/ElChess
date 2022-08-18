@@ -1,8 +1,7 @@
 import pygame
 from .constants import *
 from .puzzles.fenparser import FenParser
-from tkinter import *
-from tkinter import messagebox
+from .sprites.play_button import PlayButton
 
 
 class ChessBoard:
@@ -17,7 +16,6 @@ class ChessBoard:
         # Initialize game
         pygame.display.init()
         pygame.font.init()
-        self.running = True # Game loop
         
         
         # Create game window
@@ -71,8 +69,8 @@ class ChessBoard:
 
 
     def make_chess_move(self, player_move):
-        self.solution.pop(0)
         self.puzzle.set_chess_move(player_move)
+        self.solution.pop(0)
         
         enemy_move = FenParser.convert_uci_move(self.solution[0])
         self.puzzle.set_chess_move(enemy_move)
@@ -83,7 +81,6 @@ class ChessBoard:
         self.window.blit(self.board, (0,0))
         pygame.display.flip()   # Update window
 
-
         for ind_r, row in enumerate(self.puzzle.parse()):
             for ind_c, piece in enumerate(row):
                     if piece == " ":
@@ -93,17 +90,37 @@ class ChessBoard:
                     self.window.blit(self.chess_pieces[color][piece], self.board_coordinates[ind_c][ind_r])
                 
                     pygame.display.flip()   # Update window
+    
+    def init_game_start(self):
+        isPause = True
+        color = "White's Move" if self.puzzle.active == 'w' else "Black's Move"
+        play_button = PlayButton(color, 375, 375, 200, 100, isPause)
+        
+        while isPause:
+            for event in pygame.event.get():
+                play_button.handle_event(event)
 
+            play_button.update()
+
+            self.window.fill(BLACK)
+
+            play_button.draw(self.window)
+
+            pygame.display.update()
+
+            self.clock.tick(25)
+        
 
 
     def main(self):
-        # Initualize board
+        # Initialize board
         self.setup_board()
         
         # Setup Trackers
         selected_pieces = []
+        isRunning = True    # Game Loop
 
-        while self.running:
+        while isRunning:
             for event in pygame.event.get():
                 if not self.solution:
                     self.running = False
@@ -129,6 +146,7 @@ class ChessBoard:
 
                     
                     # Clear if same piece was last selected
+                    # @TODO Fix piece selection logic
                     selected_pieces.clear() if len(selected_pieces) > 1 or (row,col) in selected_pieces else selected_pieces.append((row,col))
                     
                     if len(selected_pieces) == 2:
@@ -156,8 +174,3 @@ class ChessBoard:
                         
             self.clock.tick(20)
             pygame.display.flip()
-
-
-if __name__ == "__main__":
-    chess_board = ChessBoard()
-    chess_board.main()
