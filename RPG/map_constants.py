@@ -1,3 +1,7 @@
+from pathlib import Path
+
+from ChessGame import assets
+
 WIDTH, HEIGHT = 832, 500
 FPS = 60
 TILE_SIZE = 64
@@ -47,3 +51,15 @@ RPG_MAP = [
 ['l',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','l',' ',' ','l'],
 ['w','w','g','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','l']
 ]
+
+
+# Path Constants
+CURRENTDIRECTORY = Path(__file__).parent.resolve()
+
+# RPG Assets
+ASSETS_GENERAL = CURRENTDIRECTORY.joinpath(r'assets')
+ASSETS_DOOR = ASSETS_GENERAL.joinpath(r'door')
+ASSETS_MONSTER = ASSETS_GENERAL.joinpath(r'monster')
+ASSETS_PLAYER = ASSETS_GENERAL.joinpath(r'player')
+ASSETS_SOUND = ASSETS_GENERAL.joinpath(r'sound-effects')
+ASSETS_WALLS = ASSETS_GENERAL.joinpath(r'walls')
