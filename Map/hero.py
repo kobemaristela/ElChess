@@ -2,7 +2,8 @@ import pathlib
 import pygame, os
 import random
 import pathlib
-from support import import_folder
+from .boss import Boss
+from .support import import_folder
 from pygame.locals import (
     RLEACCEL,
     K_UP,
@@ -13,8 +14,8 @@ from pygame.locals import (
     KEYDOWN,
     QUIT
 )
-from monster import Monster
-from door import Door
+from .monster import Monster
+from .door import Door
 
 #added to fix collision issue (overlap)
 PADDING_CONST = 20
@@ -39,6 +40,7 @@ class Hero(pygame.sprite.Sprite):
         self.level = level
         self.hp = hp
         self.attacking = False
+        self.boss = False
         
         self.obstacle_sprites = obstacle_sprites
     
@@ -134,6 +136,10 @@ class Hero(pygame.sprite.Sprite):
             elif type(sprite) == Door:
                 print('hero collided w/ door')
                 Door.move_door(sprite)
+            elif type(sprite) == Boss:
+                print('Hero collided with Boss')
+                self.boss = True
+                
 
             if direction == "horizontal":
                 if self.direction.x > 0:
@@ -145,7 +151,10 @@ class Hero(pygame.sprite.Sprite):
                     self.rect.bottom = sprite.rect.top
                 if self.direction.y < 0:
                     self.rect.top = sprite.rect.bottom
-        
+                    
+    def hero_type(self):
+        return "Hero"
+    
     def update(self):
         self.keyboard_input()
         self.get_status()

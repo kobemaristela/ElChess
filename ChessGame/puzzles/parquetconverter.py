@@ -1,13 +1,8 @@
-import pathlib
-import os
-
+from pathlib import Path
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pyarrow.csv as pv
-
-CSV_NAME = r'lichess_db_puzzle'
-PARQUET_NAME = r'lichess_db_puzzle2'
 
 
 class ParquetConverter():
@@ -16,11 +11,13 @@ class ParquetConverter():
         self.parquet = parquet
         self.chunksize = chunksize
 
+
     def csv_to_parquet_pandas(self):
-        if os.path.exists(self.parquet):
-            return False
+        if Path(self.parquet).exists():
+            raise ValueError("Parquet file already exists...")
 
         print(f"Converting CSV {self.csv} to PARQUET {self.parquet} using Pandas")
+
         csv_stream = pd.read_csv(
             self.csv, sep="\t", chunksize=self.chunksize, low_memory=False)
 
@@ -39,16 +36,14 @@ class ParquetConverter():
 
         writer.close()
 
-        return True
+
 
     def csv_to_parquet_pyarrow(self) -> bool:
-        if os.path.exists(self.parquet):
-            return False
+        if Path(self.parquet).exists():
+            raise ValueError("Parquet file already exists...")
 
         print(f"Converting CSV {self.csv} to PARQUET {self.parquet} using PyArrow")
 
         parse_options = pv.ParseOptions(delimiter="\t")
         csv_stream = pv.read_csv(self.csv, parse_options=parse_options)
         pq.write_table(csv_stream, self.parquet)
-
-        return True
