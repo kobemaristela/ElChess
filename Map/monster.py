@@ -2,8 +2,8 @@ import pygame
 import random
 import pathlib
 
-from support import import_folder
-import hero
+from .support import import_folder
+
 from pygame.locals import (
     RLEACCEL,
     K_UP,
@@ -91,11 +91,12 @@ class Monster(pygame.sprite.Sprite):
     def collide(self):
         collided_sprites = pygame.sprite.spritecollide(self, self.obstacle_sprites, False)
         for sprite in collided_sprites:
-            if type(sprite) == hero.Hero:
-                if "attack" not in sprite.status:
-                    self.attack(sprite)
-                else:
+            # Janky fix - circular import
+            foobar = getattr(sprite, 'hero_type', None)     # checks if object has attribute
+            if callable(foobar):                            # checks if the attribute is callable
+                if "attack" in sprite.status:
                     self.get_health()
-                    print(self.health)
+                else:
+                    self.attack(sprite)
         if len(collided_sprites) > 1:
             return True

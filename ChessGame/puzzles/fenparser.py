@@ -1,10 +1,12 @@
 from itertools import chain
 import re
+import chess
 
 
 class FenParser():
-    def __init__(self, fen):
+    def __init__(self, fen, game=False):
         self.fen = fen
+        self.game = game
 
         self.pieces = None              # Describes piece placement on board; starts with rank 8 to 1
         self.active = None              # 'w' - white move | 'b' - black move
@@ -15,10 +17,15 @@ class FenParser():
 
         self.__read_fen()
 
+
     def __read_fen(self):
         (self.pieces, self.active, self.castling, self.en_passant,
             self.halfmove_clock, self.fullmove_number) = self.fen.split(' ')
         self.__validate_fen_field()
+
+        if self.game:
+            self.game = chess.Board(self.fen)
+        
 
     def __validate_fen_field(self):
         re_pieces = re.compile('^[KkQqBbNnRrPp1-8/]+$')
@@ -39,8 +46,10 @@ class FenParser():
         if not re_digits.match(self.fullmove_number):
             raise ValueError(f'Invalid fullmove number: {self.fullmove_number}')          
 
+
     def __flatten(self, lst):
         return list(chain(*lst))
+
 
     def __expand(self, pieces):
         reg_exp = re.compile("(^[KkQqBbNnRrPp]$)")
@@ -51,8 +60,10 @@ class FenParser():
             res = self.__padding(pieces)    # pads spaces
         return res
 
+
     def __padding(self, num):
         return int(num) * " "
+
 
     def __parse_rank(self, rank):
         reg_exp = re.compile("(\d|[KkQqBbNnRrPp])")
@@ -60,18 +71,48 @@ class FenParser():
         pieces = self.__flatten(map(self.__expand, matches))
         return pieces
 
+
+    def __update_board(self, fen):
+        (self.pieces, self.active, self.castling, self.en_passant,
+        self.halfmove_clock, self.fullmove_number) = fen.split(' ')
+    
+        self.__validate_fen_field()
+        
+        
+    def reset_board(self):
+        self.game = True
+        self.__read_fen()
+
+
     def parse(self):
         ranks = self.pieces.split("/")
         return [self.__parse_rank(rank) for rank in ranks]
 
+
+    def get_board_piece(self,row,col):
+        return self.parse()[row][col]
+
+
     def search_piece(self, piece):
-        re_pieces = re.compile(f"^[Kk{piece}1-8/]+$")
+        re_pieces = re.compile(f"^[{piece}1-8/]+$")
         res = re_pieces.match(self.pieces)
         return True if res else False
+        
+        
+    def set_chess_move(self, move):
+        self.game.push(move)
+        
+        self.__update_board(self.game.fen())
+        
+        
+    def get_legal_moves(self):
+        return self.game.legal_moves
 
-if __name__ == "__main__":
-    FEN = "4p3/5pk1/1p3pP1/3p3p/2pP4/P4P1P/1P3PP1/7K w - - 6 34"
-    p = FenParser(FEN)
-    print(p.find_piece('Pp'))
 
-    [print(rank) for rank in p.parse()]
+    def get_board(self):
+        return self.game
+
+    
+    @staticmethod
+    def convert_uci_move(board_move):
+        return chess.Move.from_uci(board_move)
