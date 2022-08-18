@@ -64,7 +64,7 @@ class Monster(pygame.sprite.Sprite):
         other.health -= attack_damage
 
     def get_health(self):
-        self.health -= 50
+        self.health -= 5
         # need a bar or something to show monster health or something
         self.check_death()
         
@@ -94,6 +94,9 @@ class Monster(pygame.sprite.Sprite):
             # Janky fix - circular import
             foobar = getattr(sprite, 'hero_type', None)     # checks if object has attribute
             if callable(foobar):                            # checks if the attribute is callable
-                self.attack(sprite)
+                if "attack" in sprite.status:
+                    self.get_health()
+                else:
+                    self.attack(sprite)
         if len(collided_sprites) > 1:
             return True
