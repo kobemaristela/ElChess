@@ -1,26 +1,26 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
-import pathlib
-from .map_constants import *
-from .door import Door
-from .hero import Hero
-from .monster import Monster
-from .player_ui import Player_UI
-from .boss import Boss
+
+from RPG.map_constants import *
+from RPG.map.door import Door
+from RPG.mobs.hero import Hero
+from RPG.mobs.monster import Monster
+from RPG.mobs.player_ui import Player_UI
+from RPG.mobs.boss import Boss
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, position, groups, type):
         super().__init__(groups)
         if type == 'mid':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_mid.png').convert_alpha()
+            self.image = pygame.image.load(ASSETS_WALLS.joinpath('wall_mid.png')).convert_alpha()
         elif type == 'left':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_left.png').convert_alpha()
+            self.image = pygame.image.load(ASSETS_WALLS.joinpath('wall_left.png')).convert_alpha()
         elif type == 'right':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_right.png').convert_alpha()
+            self.image = pygame.image.load(ASSETS_WALLS.joinpath('wall_right.png')).convert_alpha()
         elif type == 'goo':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_goo.png').convert_alpha()
+            self.image = pygame.image.load(ASSETS_WALLS.joinpath('wall_goo.png')).convert_alpha()
         elif type == 'fountain':
-            self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/walls/wall_fountain.png').convert_alpha()
+            self.image = pygame.image.load(ASSETS_WALLS.joinpath('wall_fountain.png')).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
         
         #fixes issue with player being unable to reach left walls
@@ -112,7 +112,7 @@ class Player_Camera(pygame.sprite.Group):
         self.vector_to_keep_player_center = pygame.math.Vector2()
 
         # instantiate floor
-        self.floor_surf = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/Floor.png').convert()
+        self.floor_surf = pygame.image.load(ASSETS_GENERAL.joinpath('floor.png')).convert()
         self.floor_rect = self.floor_surf.get_rect(topleft = (0, 0))
 
     def center_camera_draw(self, player):

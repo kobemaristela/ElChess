@@ -1,12 +1,8 @@
 from multiprocessing import freeze_support
-from Map.rpg_game import Game
-from ChessGame.chessgame import ChessGame
-
-# Test Driver
-MERGEATTEMPT = True
+from RPG.rpg_game import Game
 
 if __name__ == "__main__":
-    freeze_support()    # Windows is stupid
+    freeze_support()    # Windows support on multiprocessing
     
     game = Game()
     game.homescreen()
