@@ -111,7 +111,9 @@ class ChessBoard:
             pygame.display.update()
 
             self.clock.tick(25)
-        
+
+    def board_start_screen(self):
+        pass        
 
     def main(self):
         # Initialize board
