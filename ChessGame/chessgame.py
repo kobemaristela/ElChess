@@ -47,7 +47,6 @@ class ChessGame():
         
         print(self.database)
     
-
     
     def load_database(self, database):
         db = {'easy': EASY_DATABASE, 'normal': NORMAL_DATABASE, 'hard': HARD_DATABASE}
@@ -58,6 +57,7 @@ class ChessGame():
             return PuzzleDatabase(database=db[self.settings['Game']['difficulty']])
         
         return PuzzleDatabase(database=NORMAL_DATABASE)
+
 
     def main(self):
         if not hasattr(self, "game_type"):
@@ -71,6 +71,6 @@ class ChessGame():
             chess.main()
 
 
-        if self.game_type == "normal":
+        if self.game_type == "game":
             chess = ChessBoard()
             chess.main()
