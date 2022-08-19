@@ -11,14 +11,15 @@ from .chessboard import ChessBoard
 class ChessGame():
     def __init__(self, database=None):
         # Initialize game settings
-        self.settings = self.load_settings()
+        self.settings = ChessGame.load_settings()
         self.set_difficulty(self.settings['Game']['difficulty'])
 
         # Initialize database
         self.database = self.load_database(database)
 
 
-    def load_settings(self):
+    @staticmethod
+    def load_settings():
         parser = RawConfigParser()
         parser.read(GAMEOPTIONS)
 
@@ -39,7 +40,7 @@ class ChessGame():
 
 
     def set_game_type(self, game_type):
-        if game_type not in ['normal', 'puzzle']:
+        if game_type not in ['game', 'puzzle']:
             raise ValueError(f"Invalid Game Type: {game_type}")
 
         self.game_type = game_type
