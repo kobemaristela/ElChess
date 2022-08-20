@@ -50,10 +50,10 @@ class ChessBoard:
     def get_board_coordinates(self):
         board_coordinates = []
         for x in range(0, 8):
-            board_coordinates.append([])    # Row
+            board_coordinates.append([])
             for y in range(0, 8):
-                board_coordinates[x].append([(x * self.square_size), 
-                                                (y * self.square_size)])    # Column
+                board_coordinates[x].append([(x * self.square_size) + 5, 
+                                                (y * self.square_size) + 5]) 
         
         return board_coordinates
 
@@ -76,6 +76,8 @@ class ChessBoard:
         enemy_move = FenParser.convert_uci_move(self.solution[0])
         self.puzzle.set_chess_move(enemy_move)
         self.solution.pop(0)
+        
+        self.setup_board()  # Update Board
 
 
     def setup_board(self):
@@ -93,6 +95,22 @@ class ChessBoard:
                     pygame.display.flip()   # Update window
     
     
+    def highlight_square(self, selected_pieces):
+        highlight = pygame.Surface((self.square_size, self.square_size))
+        
+        highlight.set_alpha(100) # Set transparency
+        highlight.fill(pygame.Color("green")) # Set color
+        
+        self.window.blit(highlight, self.board_coordinates[selected_pieces[1]][selected_pieces[0]]) # Highlight board piece
+        
+        pygame.display.flip() # Update window
+        
+        
+    def clear_highlight(self, selected_pieces):
+        selected_pieces.clear()
+        self.setup_board()
+        
+        
     def init_game_start(self):
         isPause = True
         color = "White's Move" if self.puzzle.active == 'w' else "Black's Move"
@@ -121,7 +139,6 @@ class ChessBoard:
         selected_pieces = []
         isRunning = True    # Game Loop
 
-        print(f"Solution: {self.solution[0]}") # Next available move
         while isRunning:
             for event in pygame.event.get():
                 if not self.solution:
@@ -145,12 +162,26 @@ class ChessBoard:
                     if not selected_pieces and (board_piece == " " or \
                         (self.puzzle.active == 'w' and not board_piece.isupper()) or \
                         (self.puzzle.active == 'b' and not board_piece.islower())):
+                            
+                        if selected_pieces:
+                            self.setup_board()
+                            
                         selected_pieces.clear()
+                            
                         continue
 
                     
                     # Piece selection logic
-                    selected_pieces.clear() if len(selected_pieces) > 1 or (row,col) in selected_pieces else selected_pieces.append((row,col))
+                    if len(selected_pieces) > 1 or (row,col) in selected_pieces:
+                        self.clear_highlight(selected_pieces)
+                        continue
+                        
+                        
+                    selected_pieces.append((row,col))
+                    
+                    
+                    if len(selected_pieces) == 1:
+                        self.highlight_square(selected_pieces[0])
                     
                     
                     # Second piece selection
@@ -161,19 +192,19 @@ class ChessBoard:
 
                         if player_move not in self.puzzle.get_legal_moves():
                             print("Invalid Move... Try Again")
-                            selected_pieces.clear()
+                            self.clear_highlight(selected_pieces)
                             continue
                         
                         if board_move != self.solution[0]:
                             print("Incorrect Move... Try Again")
-                            selected_pieces.clear()
+                            self.clear_highlight(selected_pieces)
                             continue
                             
                         
                         # Correct Move Handle
                         print("Correct Move")
+                        self.highlight_square(selected_pieces[1])   # Highlight correct move
                         self.make_chess_move(player_move)   # Remove move in solution
-                        self.setup_board()
                         
                         
             self.clock.tick(20)
