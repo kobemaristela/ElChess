@@ -20,7 +20,7 @@ def start_game(selection):
     return {
         'puzzle': lambda: start_chess_game('puzzle'),
         'rpg': lambda: start_el_chess(),
-        'chessgame': start_chess_game('game')
+        'chessgame': lambda: start_chess_game('game')
     }[selection]()
     
 
