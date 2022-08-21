@@ -1,19 +1,10 @@
 import pygame
 import random
-import pathlib
 
-from .support import import_folder
+from RPG.support import import_folder
+from RPG.map_constants import *
 
-from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT
-)
+
 SCALING_FACTOR = 2.5
 DEFAULT_IMAGE_SIZE = (16 * SCALING_FACTOR, 28 * SCALING_FACTOR)
 class Monster(pygame.sprite.Sprite):
@@ -21,7 +12,7 @@ class Monster(pygame.sprite.Sprite):
         super().__init__(groups)
         self.level = level
         self.hp = hp
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/lizard_monster.png').convert_alpha()
+        self.image = pygame.image.load(ASSETS_MONSTER.joinpath('lizard_monster.png')).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
 
         self.health = hp
@@ -43,10 +34,9 @@ class Monster(pygame.sprite.Sprite):
         return f'Monster(level={self.level}, hp={self.hp})'
 
     def import_monster_assets(self):
-        player_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/monster/'
         self.animations = {'right': [], 'left': []}
         for animation in self.animations.keys():
-            full_path = player_path / animation
+            full_path = ASSETS_MONSTER / animation
             self.animations[animation] = import_folder(full_path)
         print(self.animations)
 

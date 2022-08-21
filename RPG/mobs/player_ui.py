@@ -1,6 +1,6 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
-from .map_constants import *
+from RPG.map_constants import *
 
 class Player_UI:
     def __init__(self):

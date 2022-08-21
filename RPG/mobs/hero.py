@@ -1,21 +1,11 @@
-import pathlib
-import pygame, os
-import random
-import pathlib
+import pygame
+
 from .boss import Boss
-from .support import import_folder
-from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT
-)
+from RPG.support import import_folder
 from .monster import Monster
-from .door import Door
+from RPG.map.door import Door
+from RPG.map_constants import *
+
 
 #added to fix collision issue (overlap)
 PADDING_CONST = 20
@@ -23,10 +13,8 @@ PADDING_CONST = 20
 class Hero(pygame.sprite.Sprite):
     def __init__(self, position, groups, name, obstacle_sprites, level=1, hp=3, health=100):
         super().__init__(groups)
-        self.image = pygame.image.load(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png').convert_alpha()
+        self.image = pygame.image.load(ASSETS_PLAYER.joinpath('knight_player.png')).convert_alpha()
         self.rect = self.image.get_rect(topleft = position)
-        print('\n')
-        print(pathlib.Path(__file__).parent.parent / 'Graphics-Audio/knight_player.png')
         self.hitbox = self.rect
         self.import_player_assets()
         self.status = 'right'
@@ -86,12 +74,11 @@ class Hero(pygame.sprite.Sprite):
             # self.attack_sound.play()
     
     def import_player_assets(self):
-        player_path = pathlib.Path(__file__).parent.parent / 'Graphics-Audio/player/'
         self.animations = {'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
                             'right_attack': [], 'left_attack': [], 'up_attack': [], 'down_attack': [],
                             'right': [], 'left': [], 'up': [], 'down': []}
         for animation in self.animations.keys():
-            full_path = player_path / animation
+            full_path = ASSETS_PLAYER / animation
             self.animations[animation] = import_folder(full_path)
         print(self.animations)
     

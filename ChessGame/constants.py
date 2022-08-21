@@ -21,8 +21,8 @@ BOARDUCI = [['a8','b8','c8','d8','e8','f8','g8','h8'],
 # Directory
 CURRENTDIRECTORY = Path(__file__).parent.resolve()
 
+# Game Settings
 GAMEOPTIONS = CURRENTDIRECTORY.parent.joinpath('settings.conf')
-
 
 ## CSV Database
 DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/database/lichess_db_puzzle.csv')
