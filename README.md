@@ -52,11 +52,25 @@ ___Activate the virtual environment___
 pipenv shell
 ```
 
+## Initialize Game
+___Start Game___
+```sh
+python ElChess.py
+```
 
+___Update Settings - Game Modes, HP, Database,etc...___
+```sh
+nano settings.conf
+```
 ### Pipenv Commands
 Install additional dependencies to environment
 ```sh
 pipenv install name_of_dependency
+```
+
+Deactivate the environment
+```sh
+deactivate
 ```
 
 Remove the virtual environment
