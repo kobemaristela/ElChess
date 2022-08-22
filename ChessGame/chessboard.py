@@ -8,8 +8,8 @@ from .sprites.play_button import PlayButton
 class ChessBoard:
     def __init__(self, puzzle=None):
         # Initialize variables
-        self.screen_width = 750
-        self.screen_height = 750
+        self.screen_width = 600
+        self.screen_height = 600
 
         # Initialze puzzle
         self.puzzle, self.solution = self.load_puzzle(puzzle)
@@ -144,7 +144,7 @@ class ChessBoard:
                 if not self.solution:
                     self.running = False
                     print("Boss Defeated")
-                    sys.exit()
+                    return
                     
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -193,6 +193,7 @@ class ChessBoard:
                         if player_move not in self.puzzle.get_legal_moves():
                             print("Invalid Move... Try Again")
                             self.clear_highlight(selected_pieces)
+                            print(self.solution[0])
                             continue
                         
                         if board_move != self.solution[0]:
