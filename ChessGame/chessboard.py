@@ -1,9 +1,11 @@
 import pygame
 import sys
+
+from RPG.map_constants import GRAY
 from .constants import *
 from .puzzles.fenparser import FenParser
 from .sprites.play_button import PlayButton
-
+from pygame import *
 
 class ChessBoard:
     def __init__(self, puzzle=None):
@@ -17,12 +19,14 @@ class ChessBoard:
         # Initialize game
         pygame.display.init()
         pygame.font.init()
-        
-        
+
+      
         # Create game window
         self.window = pygame.display.set_mode([self.screen_width, self.screen_height])
         self.clock = pygame.time.Clock()    # Set game clock
         pygame.display.set_caption("ElChess")   # Set Title
+
+        self.chessboard_start_screen()
 
 
         # Board Dimensions
@@ -130,8 +134,37 @@ class ChessBoard:
 
             self.clock.tick(25)
 
-    def board_start_screen(self):
-        pass        
+    def player_piece(self) -> str:
+        if self.puzzle.active == 'w':
+            return 'white'
+        elif self.puzzle.active == 'b':
+            return 'brown'
+
+    def chessboard_start_screen(self):
+        piece_str = "You are the " + self.player_piece() + " pieces!"
+
+        title_font = pygame.font.SysFont("inkfree", 70)
+        font = pygame.font.SysFont("inkfree", 50)
+        chessboard_text = title_font.render('Elchess Boss Battle', True, RED)
+        player_color_text = font.render(piece_str, True, WHITE)
+        continue_text = font.render('Press anywhere to start', True, GRAY)  
+
+        start_puzzle = True
+        while start_puzzle:
+            self.window.fill(BLACK)
+            self.window.blit(chessboard_text, (80, 100))
+            self.window.blit(player_color_text, (100, 300))
+            self.window.blit(continue_text, (120, 400)) 
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    if event.key == K_BACKSPACE:
+                        start_puzzle = False
+                        sys.exit()
+                elif event.type == MOUSEBUTTONDOWN:
+                    start_puzzle = False
+                    self.window.fill(BLACK)
+                    pygame.display.flip()
 
     def main(self):
         # Initialize board
