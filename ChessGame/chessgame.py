@@ -70,7 +70,6 @@ class ChessGame():
             chess = ChessBoard(puzzle)
             chess.main()
 
-
         if self.game_type == "game":
             chess = ChessBoard()
             chess.main()

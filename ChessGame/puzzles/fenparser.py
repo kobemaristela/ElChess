@@ -1,6 +1,8 @@
 from itertools import chain
+from ChessGame.constants import *
 import re
 import chess
+import chess.engine
 
 
 class FenParser():
@@ -77,6 +79,25 @@ class FenParser():
         self.halfmove_clock, self.fullmove_number) = fen.split(' ')
     
         self.__validate_fen_field()
+    
+    
+    def start_chess_engine(self):
+        self.engine = chess.engine.SimpleEngine.popen_uci(STOCKFISH_ENGINE)
+        
+    
+    def make_enemy_move(self):
+        if not hasattr(self, "engine"):
+            self.__start_chess_engine()
+        
+        result = self.engine.play(self.game, chess.engine.Limit(time=.1))
+        self.game.push(result.move)
+        
+        self.__update_board(self.game.fen())
+
+
+    def stop_chess_engine(self):
+        if self.engine:
+            self.engine.quit()
         
         
     def reset_board(self):

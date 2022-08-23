@@ -42,8 +42,12 @@ class ChessBoard:
     
 
     def load_puzzle(self, puzzle):
-        if not puzzle:
-            return None, None
+        if puzzle is None:
+            fen = r'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+            game = FenParser(fen, game=True)
+            game.start_chess_engine()
+            
+            return game, None
 
         temp_puzzle = puzzle.split(',')
         puzzle = FenParser(temp_puzzle[0], game=True)
@@ -73,13 +77,24 @@ class ChessBoard:
         return chess_pieces
 
 
-    def make_chess_move(self, player_move):
-        self.puzzle.set_chess_move(player_move)
+    def make_enemy_chess_game_move(self):
+        # asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
+        # asyncio.run(self.puzzle.make_enemy_move())
+        self.puzzle.make_enemy_move()
+        
+    
+    def make_chess_puzzle_move(self):
         self.solution.pop(0)
         
         enemy_move = FenParser.convert_uci_move(self.solution[0])
         self.puzzle.set_chess_move(enemy_move)
         self.solution.pop(0)
+
+
+    def make_chess_move(self, player_move):
+        self.puzzle.set_chess_move(player_move)
+        
+        self.make_chess_puzzle_move()  if self.solution is not None else self.make_enemy_chess_game_move()
         
         self.setup_board()  # Update Board
 
@@ -134,11 +149,13 @@ class ChessBoard:
 
             self.clock.tick(25)
 
+
     def player_piece(self) -> str:
         if self.puzzle.active == 'w':
             return 'white'
         elif self.puzzle.active == 'b':
             return 'brown'
+
 
     def chessboard_start_screen(self):
         piece_str = "You are the " + self.player_piece() + " pieces!"
@@ -166,6 +183,7 @@ class ChessBoard:
                     self.window.fill(BLACK)
                     pygame.display.flip()
 
+
     def main(self):
         # Initialize board
         self.setup_board()
@@ -176,13 +194,14 @@ class ChessBoard:
 
         while isRunning:
             for event in pygame.event.get():
-                if not self.solution:
+                if self.solution is not None and len(self.solution) == 0:
                     self.running = False
                     print("Boss Defeated")
                     sys.exit()
                     
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.puzzle.stop_chess_engine()
                     sys.exit()
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -230,7 +249,7 @@ class ChessBoard:
                             self.clear_highlight(selected_pieces)
                             continue
                         
-                        if board_move != self.solution[0]:
+                        if self.solution is not None and board_move != self.solution[0]:
                             print("Incorrect Move... Try Again")
                             self.clear_highlight(selected_pieces)
                             continue
