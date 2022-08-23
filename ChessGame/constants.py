@@ -24,6 +24,9 @@ CURRENTDIRECTORY = Path(__file__).parent.resolve()
 # Game Settings
 GAMEOPTIONS = CURRENTDIRECTORY.parent.joinpath('settings.conf')
 
+# Chess Engine
+STOCKFISH_ENGINE = CURRENTDIRECTORY.joinpath(r'engine/stockfish_15_x64_avx2.exe')
+
 ## CSV Database
 DATABASE_CSV = CURRENTDIRECTORY.joinpath(r'puzzles/database/lichess_db_puzzle.csv')
 EASY_DATABASE = CURRENTDIRECTORY.joinpath(r'puzzles/database/easy_db.csv')

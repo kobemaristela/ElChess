@@ -37,7 +37,6 @@ class ParquetConverter():
         writer.close()
 
 
-
     def csv_to_parquet_pyarrow(self) -> bool:
         if Path(self.parquet).exists():
             raise ValueError("Parquet file already exists...")
