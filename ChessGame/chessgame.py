@@ -9,14 +9,14 @@ from .chessboard import ChessBoard
 
 
 class ChessGame():
-    def __init__(self, database=None):
+    def __init__(self, database=None, hero=None):
         # Initialize game settings
         self.settings = ChessGame.load_settings()
         self.set_difficulty(self.settings['Game']['difficulty'])
 
         # Initialize database
         self.database = self.load_database(database)
-
+        self.hero = hero
 
     @staticmethod
     def load_settings():
@@ -67,7 +67,7 @@ class ChessGame():
             self.database.main(read=True)
             puzzle = choice(self.database.read_results())
 
-            chess = ChessBoard(puzzle)
+            chess = ChessBoard(puzzle, self.hero)
             chess.main()
 
 

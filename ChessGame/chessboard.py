@@ -2,16 +2,17 @@ import pygame
 import sys
 
 from RPG.map_constants import GRAY
+from RPG.mobs.player_ui import Player_UI
 from .constants import *
 from .puzzles.fenparser import FenParser
 from .sprites.play_button import PlayButton
 from pygame import *
 
 class ChessBoard:
-    def __init__(self, puzzle=None):
+    def __init__(self, puzzle=None, hero=None):
         # Initialize variables
-        self.screen_width = 600
-        self.screen_height = 600
+        self.screen_width = 750
+        self.screen_height = 750
 
         # Initialze puzzle
         self.puzzle, self.solution = self.load_puzzle(puzzle)
@@ -39,7 +40,9 @@ class ChessBoard:
 
         # Chess Pieces
         self.chess_pieces = self.load_chess_pieces()
-    
+
+        self.hero = hero
+        self.player_ui = Player_UI()
 
     def load_puzzle(self, puzzle):
         if not puzzle:
@@ -175,6 +178,7 @@ class ChessBoard:
         isRunning = True    # Game Loop
 
         while isRunning:
+            self.player_ui.display_health_bar(self.hero, self.hero.health, 100)
             for event in pygame.event.get():
                 if not self.solution:
                     self.running = False
@@ -234,6 +238,11 @@ class ChessBoard:
                         if board_move != self.solution[0]:
                             print("Incorrect Move... Try Again")
                             self.clear_highlight(selected_pieces)
+                            if self.hero:
+                                self.hero.health -= 5
+                                print(self.hero.health)
+                            if self.hero.health <= 0:
+                                return
                             continue
                             
                         
