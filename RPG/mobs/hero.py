@@ -29,6 +29,7 @@ class Hero(pygame.sprite.Sprite):
         self.hp = hp
         self.attacking = False
         self.boss = False
+        self.collided_boss = None
         
         self.obstacle_sprites = obstacle_sprites
     
@@ -129,6 +130,7 @@ class Hero(pygame.sprite.Sprite):
             elif type(sprite) == Boss:
                 print('Hero collided with Boss')
                 self.boss = True
+                self.collided_boss = sprite
                 
 
             if direction == "horizontal":

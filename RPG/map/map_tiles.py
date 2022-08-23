@@ -79,15 +79,15 @@ class Map:
                 elif col == 'r':
                     Wall((x, y), [self.visible_sprites, self.obstacle_sprites,self.monster_collideables], 'right')
                 elif col == 'g':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'goo')
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites, self.monster_collideables], 'goo')
                 elif col == 'f':
-                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites], 'fountain')
+                    Wall((x, y), [self.visible_sprites, self.obstacle_sprites, self.monster_collideables], 'fountain')
                 elif col == 'd':
                     self.door = Door((x, y), [self.visible_sprites, self.obstacle_sprites], 'closed')           
                 elif col == 'p':
                     self.player = Hero((x, y), [self.visible_sprites, self.monster_collideables],'bob', self.obstacle_sprites)
                 elif col == 'B':
-                    Boss((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites, self.monster_collideables])
+                    Boss((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites, self.monster_collideables], self.monster_collideables)
                 elif col == 'M':
                     Monster((x, y), [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites, self.monster_collideables], self.monster_collideables)
 

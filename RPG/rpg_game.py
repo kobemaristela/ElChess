@@ -84,11 +84,12 @@ class Game:
             self.clock.tick(FPS)
             
             if self.map.player.boss:
-                running = False
-                chess_game = ChessGame()
+                chess_game = ChessGame(hero=self.map.player)
                 chess_game.set_game_type("puzzle")
                 chess_game.main()
-
+                self.map.player.boss = False
+                self.map.player.collided_boss.kill()
+                self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
     def game_over(self):
         title_font = pygame.font.SysFont("inkfree", 115)
         font = pygame.font.SysFont("inkfree", 40)
