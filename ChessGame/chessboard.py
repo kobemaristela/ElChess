@@ -42,7 +42,8 @@ class ChessBoard:
         self.chess_pieces = self.load_chess_pieces()
 
         self.hero = hero
-        self.player_ui = Player_UI()
+        if self.hero:
+            self.player_ui = Player_UI()
 
     def load_puzzle(self, puzzle):
         if puzzle is None:
@@ -196,7 +197,8 @@ class ChessBoard:
         isRunning = True    # Game Loop
 
         while isRunning:
-            self.player_ui.display_health_bar(self.hero, self.hero.health, 100)
+            if self.hero:
+                self.player_ui.display_health_bar(self.hero, self.hero.health, 100)
             for event in pygame.event.get():
                 if self.solution is not None and len(self.solution) == 0:
                     self.running = False
@@ -259,7 +261,7 @@ class ChessBoard:
                             if self.hero:
                                 self.hero.health -= 5
                                 print(self.hero.health)
-                            if self.hero.health <= 0:
+                            if self.hero and self.hero.health <= 0:
                                 return
                             continue
                             
