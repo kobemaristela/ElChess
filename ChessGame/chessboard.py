@@ -251,7 +251,6 @@ class ChessBoard:
                         if player_move not in self.puzzle.get_legal_moves():
                             print("Invalid Move... Try Again")
                             self.clear_highlight(selected_pieces)
-                            print(self.solution[0])
                             continue
                         
                         if self.solution is not None and board_move != self.solution[0]:

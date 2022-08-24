@@ -96,7 +96,7 @@ class FenParser():
 
 
     def stop_chess_engine(self):
-        if self.engine:
+        if hasattr(self, 'engine') and self.engine: # Short circuit
             self.engine.quit()
         
         
